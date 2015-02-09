@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.pvlf.android.timer"
+    android:versionCode="1001"
+    android:versionName="1.0.01">
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="19" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <!-- 
+        	TimerActivity is configured to use launchMode="singleTop".
+	        	The "standard" and "singleTop" modes differ from each other in just one respect: 
+	        	Every time there's a new intent for a "standard" activity, a new instance of the class is created to respond to that intent. 
+	        	Each instance handles a single intent. Similarly, a new instance of a "singleTop" activity may also be created to handle a new intent. 
+	        	However, if the target task already has an existing instance of the activity at the top of its stack, that instance will receive 
+	        	the new intent (in an onNewIntent() call); a new instance is not created.
+        	TimerActivity is configured to handle orientation, keyboard and screen size changes itself.
+        		It's implementation of onConfigurationChanged() is empty so no new instance is created and no data refresh is executed as the result.
+         -->
+        <activity
+            android:name="com.pvlf.android.timer.TimerActivity"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name">
+            <!-- The system will deliver an implicit intent to your app component 
+            	 only if the intent can pass through one of your intent filters.
+            	 An explicit intent is always delivered to its target, 
+            	 regardless of any intent filters the component declares.
+             -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+    </application>
+
+</manifest>

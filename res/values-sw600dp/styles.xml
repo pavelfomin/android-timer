@@ -1,0 +1,7 @@
+<resources>
+	<!-- incresed normal style for 7" tablets  -->
+    <style name="TimerTextNormal" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">28sp</item>
+	</style>
+
+</resources>
