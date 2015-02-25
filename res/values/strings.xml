@@ -3,6 +3,7 @@
 
     <string name="app_name">Timer</string>
     <string name="reset">Reset</string>
+    <string name="statistic">Statistic</string>
     <string name="resetTimer">Reset Timer</string>
     
     <string name="ok">OK</string>
@@ -10,5 +11,6 @@
     
     <!-- messages -->
     <string name="msg_resetTimer">Reset timer data</string>
+    <string name="msg_timerNotActive">Timer is not active</string>
     
 </resources>

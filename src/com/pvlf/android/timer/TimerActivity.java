@@ -14,9 +14,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.pvlf.android.timer.R;
 import com.pvlf.android.timer.model.Lap;
 import com.pvlf.android.timer.model.Run;
+import com.pvlf.android.timer.model.Statistic;
 
 /**
  * Main timer activity.
@@ -67,6 +70,7 @@ public class TimerActivity extends ListActivity {
 		} else {
 			long currentTimeMillis = System.currentTimeMillis();
 			lapDuration = currentTimeMillis - lap.getStart();
+			runDuration += lapDuration;
 			numberOfLaps--;
 			//post another update
 			timerHandler.postDelayed(timerRunnable, 100);
@@ -136,6 +140,11 @@ public class TimerActivity extends ListActivity {
 					
 					//update timer view one more time
 					updateTimerView();
+					
+					//show statistic
+					statistic(null);
+				} else {
+					Toast.makeText(this, getString(R.string.msg_timerNotActive), Toast.LENGTH_SHORT).show();
 				}
 			}
 			return true;
@@ -146,12 +155,12 @@ public class TimerActivity extends ListActivity {
 				if (run == null) {
 					//start new run
 					run = new Run();
-					//post to handler
+					//post the timer update
 	                timerHandler.postDelayed(timerRunnable, 0);
 				} else if(run.isCompleted()) {
 					//resume run
 					run.resume();
-					//post to handler
+					//post the timer update
 	                timerHandler.postDelayed(timerRunnable, 0);
 				} else {
 					endLap(currentTimeMillis);
@@ -187,6 +196,7 @@ public class TimerActivity extends ListActivity {
 	}
 
 	/**
+	 * Resets the timer.
 	 * @param button
 	 */
 	public void reset(View button) {
@@ -207,6 +217,33 @@ public class TimerActivity extends ListActivity {
                 }
         });
         adb.show();
+	}
+
+	/**
+	 * Shows run's statistic.
+	 * @param button
+	 */
+	public void statistic(View button) {
+
+		if (run != null) {
+			Statistic statistic = run.getRunStatistic();
+			
+			if (statistic != null) {
+				String message = String.format("Min: %s Max: %s Aver: %s", 
+						Lap.formatDuration(statistic.getMinimum()), 
+						Lap.formatDuration(statistic.getMaximum()), 
+						Lap.formatDuration(statistic.getAverage()));
+				
+				AlertDialog.Builder adb = new AlertDialog.Builder(this);
+				adb.setTitle(R.string.statistic);
+				adb.setMessage(message);
+				adb.setPositiveButton(getString(R.string.ok), null);
+				adb.show();
+				
+				Log.d(TAG, "Run statistic: "+ message);
+			}
+			
+		}
 	}
 
 }

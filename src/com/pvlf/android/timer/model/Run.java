@@ -78,6 +78,39 @@ public class Run {
 	public boolean isCompleted() {
 		return completed;
 	}
+
+	/**
+	 * Returns run statistic for completed laps.
+	 * @return run statistic for completed laps.
+	 */
+	public Statistic getRunStatistic() {
+		
+		long minimum = Long.MAX_VALUE;
+		long maximum = Long.MIN_VALUE;
+		long totalDuration = 0;
+		int totalCompleted = 0;
+		
+		for (Lap lap : laps) {
+			if (lap.isCompleted()) {
+				long duration = lap.getDuration();
+				if (duration > maximum) {
+					maximum = duration;
+				}
+				if (duration < minimum) {
+					minimum = duration;
+				}
+				totalDuration += duration;
+				totalCompleted++;
+			}
+		}
+
+		Statistic statistic = null;
+		if (totalCompleted > 0) {
+			statistic = new Statistic(minimum, maximum, totalDuration / totalCompleted);
+		}
+		
+		return statistic;
+	}
 	
 	@Override
 	public String toString() {

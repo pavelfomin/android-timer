@@ -20,6 +20,14 @@
         android:onClick="reset"
         android:drawableLeft="@android:drawable/ic_menu_delete"
         android:text="@string/reset" />
+
+    <Button
+        android:id="@+id/buttonStatistic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="statistic"
+        android:drawableLeft="@android:drawable/ic_menu_help"
+        android:text="@string/statistic" />
     
     <ListView
         android:id="@android:id/list"
