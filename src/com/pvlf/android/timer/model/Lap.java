@@ -45,8 +45,10 @@ public class Lap {
         int seconds = (int) (millis / 1000);
         int minutes = seconds / 60;
         seconds = seconds % 60;
+        int hours = minutes / 60;
+        minutes = minutes % 60;
 
-        return String.format("%d:%02d:%02d", minutes, seconds, (millis % 1000) / 10);
+        return String.format("%d:%d:%02d:%02d", hours, minutes, seconds, (millis % 1000) / 10);
     }
 	
 	public String toFormattedString() {
