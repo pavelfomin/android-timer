@@ -16,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
@@ -67,6 +68,10 @@ public class TimerActivity extends ListActivity {
     	super.onCreate(savedInstanceState);
         setContentView(R.layout.timer);
 
+        //keep screen on
+        //TODO: parameterize keep screen on? 
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        
 		//until preferences activity is invoked for the very first time after the application's install, 
 		//the call to sharedPreferences.getString(key, null) will return null even if the android:defaultValue attribute is set in xml.
 		//reset default values only on the first ever read
