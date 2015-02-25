@@ -32,6 +32,14 @@ public class Lap {
 		setDuration(end - getStart());
 	}
 
+	/**
+	 * Returns true if the lap is completed.
+	 * @return true if the lap is completed.
+	 */
+	public boolean isCompleted() {
+		return getDuration() > 0;
+	}
+
 	public static String formatDuration(long millis) {
 
         int seconds = (int) (millis / 1000);

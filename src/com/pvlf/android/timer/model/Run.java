@@ -8,18 +8,12 @@ import java.util.List;
  */
 public class Run {
 
-	private final long start;
 	private final List<Lap> laps;
-	private long duration;
 	private String description;
+	private boolean completed;
 
-	public Run(long start) {
-		this.start = start;
+	public Run() {
 		this.laps = new ArrayList<Lap>();
-	}
-
-	public long getStart() {
-		return start;
 	}
 
 	public List<Lap> getLaps() {
@@ -31,11 +25,30 @@ public class Run {
 		return laps;
 	}
 
-	public long getDuration() {
-		return duration;
+	/**
+	 * Returns current lap.
+	 * @return current lap.
+	 */
+	public Lap getCurrentLap() {
+		return (laps.isEmpty() ? null : laps.get(laps.size() - 1));
 	}
 
-	public long getLapsDuration() {
+	/**
+	 * Ends current lap.
+	 * @param currentTimeMillis
+	 * @return current lap
+	 */
+	public Lap endLap(long currentTimeMillis) {
+	
+		Lap lap = getCurrentLap();
+		if (lap != null) {
+			// end the current lap
+			lap.end(currentTimeMillis);
+		}
+		return lap;
+	}
+	
+	public long getDuration() {
 		
 		long duration = 0;
 		
@@ -46,10 +59,6 @@ public class Run {
 		return duration;
 	}
 	
-	public void setDuration(long duration) {
-		this.duration = duration;
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -58,18 +67,21 @@ public class Run {
 		this.description = description;
 	}
 
-	public void end(long end) {
-		setDuration(end - getStart());
+	public void end() {
+		completed = true;
+	}
+
+	public void resume() {
+		completed = false;
 	}
 	
 	public boolean isCompleted() {
-		return getDuration() > 0;
+		return completed;
 	}
 	
 	@Override
 	public String toString() {
-		return String
-				.format("Run [start=%s, laps=%s, duration=%s, description=%s]", start, laps, duration, description);
+		return String.format("Run [laps=%s, description=%s]", laps, description);
 	}
 	
 }

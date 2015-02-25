@@ -28,7 +28,6 @@ public class TimerActivity extends ListActivity {
     private TextView timerTextView;
     
     private Run run;
-    private Lap lap;
 
 	/**
 	 * List data adapter.
@@ -58,23 +57,23 @@ public class TimerActivity extends ListActivity {
      */
     private void updateTimerView() {
 
-    	long runDuration;
     	long lapDuration;
-
+    	long runDuration = run.getDuration();
+    	Lap lap = run.getCurrentLap();
+    	int numberOfLaps = run.getLaps().size();
+    	
     	if (run.isCompleted()) {
-			runDuration = run.getDuration();
 			lapDuration = lap.getDuration();
-			//Log.d(TAG, String.format("run duration: %d laps: %d", runDuration, run.getLapsDuration()));
 		} else {
 			long currentTimeMillis = System.currentTimeMillis();
-			runDuration = currentTimeMillis - run.getStart();
 			lapDuration = currentTimeMillis - lap.getStart();
+			numberOfLaps--;
 			//post another update
 			timerHandler.postDelayed(timerRunnable, 100);
 		}
 		
 		timerTextView.setText(String.format("%s laps:%d %s", 
-        		Lap.formatDuration(runDuration), run.getLaps().size(), Lap.formatDuration(lapDuration)));
+        		Lap.formatDuration(runDuration), numberOfLaps, Lap.formatDuration(lapDuration)));
     }
 
     
@@ -128,7 +127,7 @@ public class TimerActivity extends ListActivity {
 		
 		case KeyEvent.KEYCODE_VOLUME_UP:
 			if (action == KeyEvent.ACTION_DOWN) {
-                if (run != null) {
+                if (run != null && (! run.isCompleted())) {
                 	//end run
 					endRun(currentTimeMillis);
 					
@@ -146,15 +145,20 @@ public class TimerActivity extends ListActivity {
 			if (action == KeyEvent.ACTION_DOWN) {
 				if (run == null) {
 					//start new run
-					run = new Run(currentTimeMillis);
+					run = new Run();
+					//post to handler
+	                timerHandler.postDelayed(timerRunnable, 0);
+				} else if(run.isCompleted()) {
+					//resume run
+					run.resume();
 					//post to handler
 	                timerHandler.postDelayed(timerRunnable, 0);
 				} else {
 					endLap(currentTimeMillis);
 				}
 				//start new lap
-				lap = new Lap(currentTimeMillis);
-				Log.d(TAG, "dispatchKeyEvent run="+ run);
+				run.addLap(new Lap(currentTimeMillis));
+				//Log.d(TAG, "dispatchKeyEvent run="+ run);
 			}
 			return true;
 		default:
@@ -168,15 +172,14 @@ public class TimerActivity extends ListActivity {
 		endLap(currentTimeMillis);
 
 		//finalize the run
-		run.end(currentTimeMillis);
+		run.end();
 	}
 	
 	private void endLap(long currentTimeMillis) {
 
 		//end the current lap
-		lap.end(currentTimeMillis);
-		//add it to the list of laps
-		run.addLap(lap);
+		Lap lap = run.endLap(currentTimeMillis);
+
 		//insert new lap at the beginning of the lap
 		adapter.insert(String.format("%d: %s", run.getLaps().size(), lap.toFormattedString()), 0);
 		//notify adapter of the changes made to force the data refresh
