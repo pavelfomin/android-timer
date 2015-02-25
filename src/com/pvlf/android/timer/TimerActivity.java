@@ -61,32 +61,6 @@ public class TimerActivity extends ListActivity {
         }
     };
 
-    /**
-     * Updates the timer view.
-     */
-    private void updateTimerView() {
-
-    	long lapDuration;
-    	long runDuration = run.getDuration();
-    	Lap lap = run.getCurrentLap();
-    	int numberOfLaps = run.getLaps().size();
-    	
-    	if (run.isCompleted()) {
-			lapDuration = lap.getDuration();
-		} else {
-			long currentTimeMillis = System.currentTimeMillis();
-			lapDuration = currentTimeMillis - lap.getStart();
-			runDuration += lapDuration;
-			numberOfLaps--;
-			//post another update
-			timerHandler.postDelayed(timerRunnable, 100);
-		}
-		
-		timerTextView.setText(String.format("%s laps:%d %s", 
-        		Lap.formatDuration(runDuration), numberOfLaps, Lap.formatDuration(lapDuration)));
-    }
-
-    
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -110,24 +84,11 @@ public class TimerActivity extends ListActivity {
         timerTextView = (TextView) findViewById(R.id.textDuration);
     }
 
-    /**
-     * Creates new adapter using favorites data.
-     * @return new instance of ArrayAdapter
-     */
-    private ArrayAdapter<String> createArrayAdapter() {
-    	
-    	List<String> items = new ArrayList<String>();
-    	adapter = new ArrayAdapter<String>(this, R.layout.lap, items);
-    	Log.d(TAG, "Created new adapter="+ adapter );
-		return adapter;
-    }
-
     @Override
     public void onPause() {
 
     	super.onPause();
-        //TODO: not sure about removeCallbacks on pause
-        timerHandler.removeCallbacks(timerRunnable);
+        //timerHandler.removeCallbacks(timerRunnable);
     }
 
 	@Override
@@ -186,6 +147,18 @@ public class TimerActivity extends ListActivity {
 		}
 	}
 
+    /**
+     * Creates new adapter using favorites data.
+     * @return new instance of ArrayAdapter
+     */
+    private ArrayAdapter<String> createArrayAdapter() {
+    	
+    	List<String> items = new ArrayList<String>();
+    	adapter = new ArrayAdapter<String>(this, R.layout.lap, items);
+    	Log.d(TAG, "Created new adapter="+ adapter );
+		return adapter;
+    }
+
 	private void endRun(long currentTimeMillis) {
 		
 		//end the current lap
@@ -205,6 +178,31 @@ public class TimerActivity extends ListActivity {
 		//notify adapter of the changes made to force the data refresh
 		adapter.notifyDataSetChanged();
 	}
+
+    /**
+     * Updates the timer view.
+     */
+    private void updateTimerView() {
+
+    	long lapDuration;
+    	long runDuration = run.getDuration();
+    	Lap lap = run.getCurrentLap();
+    	int numberOfLaps = run.getLaps().size();
+    	
+    	if (run.isCompleted()) {
+			lapDuration = lap.getDuration();
+		} else {
+			long currentTimeMillis = System.currentTimeMillis();
+			lapDuration = currentTimeMillis - lap.getStart();
+			runDuration += lapDuration;
+			numberOfLaps--;
+			//post another update
+			timerHandler.postDelayed(timerRunnable, 100);
+		}
+		
+		timerTextView.setText(String.format("%s laps:%d %s", 
+        		Lap.formatDuration(runDuration), numberOfLaps, Lap.formatDuration(lapDuration)));
+    }
 
 	/**
 	 * Resets the timer.
