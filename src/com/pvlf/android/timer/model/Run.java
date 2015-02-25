@@ -35,6 +35,17 @@ public class Run {
 		return duration;
 	}
 
+	public long getLapsDuration() {
+		
+		long duration = 0;
+		
+		for (Lap lap : laps) {
+			duration += lap.getDuration();
+		}
+
+		return duration;
+	}
+	
 	public void setDuration(long duration) {
 		this.duration = duration;
 	}
@@ -47,6 +58,14 @@ public class Run {
 		this.description = description;
 	}
 
+	public void end(long end) {
+		setDuration(end - getStart());
+	}
+	
+	public boolean isCompleted() {
+		return getDuration() > 0;
+	}
+	
 	@Override
 	public String toString() {
 		return String

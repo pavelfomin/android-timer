@@ -13,7 +13,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.pvlf.android.timer.model.Lap;
@@ -49,23 +48,43 @@ public class TimerActivity extends ListActivity {
 
         @Override
         public void run() {
-            long currentTimeMillis = System.currentTimeMillis();
-
-            timerTextView.setText(String.format("%s laps:%d %s", 
-            		Lap.formatDuration(currentTimeMillis - run.getStart()), run.getLaps().size(), Lap.formatDuration(currentTimeMillis - lap.getStart())));
-
-            timerHandler.postDelayed(this, 100);
+        	
+        	updateTimerView();
         }
-        
     };
 
+    /**
+     * Updates the timer view.
+     */
+    private void updateTimerView() {
+
+    	long runDuration;
+    	long lapDuration;
+
+    	if (run.isCompleted()) {
+			runDuration = run.getDuration();
+			lapDuration = lap.getDuration();
+			//Log.d(TAG, String.format("run duration: %d laps: %d", runDuration, run.getLapsDuration()));
+		} else {
+			long currentTimeMillis = System.currentTimeMillis();
+			runDuration = currentTimeMillis - run.getStart();
+			lapDuration = currentTimeMillis - lap.getStart();
+			//post another update
+			timerHandler.postDelayed(timerRunnable, 100);
+		}
+		
+		timerTextView.setText(String.format("%s laps:%d %s", 
+        		Lap.formatDuration(runDuration), run.getLaps().size(), Lap.formatDuration(lapDuration)));
+    }
+
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
     	super.onCreate(savedInstanceState);
         setContentView(R.layout.timer);
         
-		ListView listView = (ListView) findViewById(android.R.id.list);
+		//ListView listView = (ListView) findViewById(android.R.id.list);
 		//enable long click event for list items
 		//listView.setLongClickable(true);
 		//attach the LongClickListener to the list
@@ -109,9 +128,15 @@ public class TimerActivity extends ListActivity {
 		
 		case KeyEvent.KEYCODE_VOLUME_UP:
 			if (action == KeyEvent.ACTION_DOWN) {
-                timerHandler.removeCallbacks(timerRunnable);
                 if (run != null) {
-					endLap(currentTimeMillis);
+                	//end run
+					endRun(currentTimeMillis);
+					
+					//remove any pending posts from the message queue
+					timerHandler.removeCallbacks(timerRunnable);
+					
+					//update timer view one more time
+					updateTimerView();
 				}
 			}
 			return true;
@@ -137,13 +162,23 @@ public class TimerActivity extends ListActivity {
 		}
 	}
 
+	private void endRun(long currentTimeMillis) {
+		
+		//end the current lap
+		endLap(currentTimeMillis);
+
+		//finalize the run
+		run.end(currentTimeMillis);
+	}
+	
 	private void endLap(long currentTimeMillis) {
 
 		//end the current lap
 		lap.end(currentTimeMillis);
 		//add it to the list of laps
 		run.addLap(lap);
-		adapter.add(String.format("%d: %s", run.getLaps().size(), lap.toFormattedString()));
+		//insert new lap at the beginning of the lap
+		adapter.insert(String.format("%d: %s", run.getLaps().size(), lap.toFormattedString()), 0);
 		//notify adapter of the changes made to force the data refresh
 		adapter.notifyDataSetChanged();
 	}
@@ -152,6 +187,7 @@ public class TimerActivity extends ListActivity {
 	 * @param button
 	 */
 	public void reset(View button) {
+		
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
         adb.setTitle(R.string.resetTimer);
         adb.setMessage(getString(R.string.msg_resetTimer));
