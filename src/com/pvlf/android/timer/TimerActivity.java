@@ -6,17 +6,21 @@ import java.util.List;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pvlf.android.timer.R;
 import com.pvlf.android.timer.model.Lap;
 import com.pvlf.android.timer.model.Run;
 import com.pvlf.android.timer.model.Statistic;
@@ -27,6 +31,8 @@ import com.pvlf.android.timer.model.Statistic;
  */
 public class TimerActivity extends ListActivity {
 	private static final String TAG = TimerActivity.class.getName();
+
+	private static final String LAPS_PER_MILE_KEY = "lapsPerMile";
 
     private TextView timerTextView;
     
@@ -86,7 +92,12 @@ public class TimerActivity extends ListActivity {
 
     	super.onCreate(savedInstanceState);
         setContentView(R.layout.timer);
-        
+
+		//until preferences activity is invoked for the very first time after the application's install, 
+		//the call to sharedPreferences.getString(key, null) will return null even if the android:defaultValue attribute is set in xml.
+		//reset default values only on the first ever read
+		PreferenceManager.setDefaultValues(getBaseContext(), R.xml.preferences, false);
+
 		//ListView listView = (ListView) findViewById(android.R.id.list);
 		//enable long click event for list items
 		//listView.setLongClickable(true);
@@ -229,10 +240,7 @@ public class TimerActivity extends ListActivity {
 			Statistic statistic = run.getRunStatistic();
 			
 			if (statistic != null) {
-				String message = String.format("Min: %s Max: %s Aver: %s", 
-						Lap.formatDuration(statistic.getMinimum()), 
-						Lap.formatDuration(statistic.getMaximum()), 
-						Lap.formatDuration(statistic.getAverage()));
+				String message = formatStatistic(statistic);
 				
 				AlertDialog.Builder adb = new AlertDialog.Builder(this);
 				adb.setTitle(R.string.statistic);
@@ -244,6 +252,62 @@ public class TimerActivity extends ListActivity {
 			}
 			
 		}
+	}
+
+
+	private String formatStatistic(Statistic statistic) {
+
+		//get default shared preferences 
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+		//get currently configured value for laps per mile
+    	float lapsPerMile = 1;
+		
+		try {
+			lapsPerMile = Float.parseFloat(sharedPreferences.getString(LAPS_PER_MILE_KEY, "1"));
+		} catch (NumberFormatException e) {
+			Log.w(TAG, "Run statistic: laps per mile value can't be parsed", e);
+		}
+    	
+		StringBuilder sb = new StringBuilder();
+		sb.append("Time per lap\n");
+		sb.append("Min: ").append(Lap.formatDuration(statistic.getMinimum()));
+		sb.append(" Max: ").append(Lap.formatDuration(statistic.getMaximum()));
+		sb.append(" Aver: ").append(Lap.formatDuration(statistic.getAverage()));
+		sb.append("\nTime per mile\n");
+		sb.append("Min: ").append(Lap.formatDuration((long) (statistic.getMinimum() * lapsPerMile)));
+		sb.append(" Max: ").append(Lap.formatDuration((long) (statistic.getMaximum() * lapsPerMile)));
+		sb.append(" Aver: ").append(Lap.formatDuration((long) (statistic.getAverage() * lapsPerMile)));
+		
+		return sb.toString();
+	}
+	
+	/**
+	 * Initialize the contents of the Activity's standard options menu.
+	 * The content of the menu is defined in /res/menu/main.xml.
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+	/**
+	 * Process menu options selection.
+	 * This method is called whenever an item in your options menu is selected.
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		switch (item.getItemId()) {
+		case R.id.settings:
+			startActivity(new Intent(this, SettingsActivity.class));
+			break;
+		}
+
+		//Return false to allow normal menu processing to proceed, true to consume it here.
+		return true;
 	}
 
 }

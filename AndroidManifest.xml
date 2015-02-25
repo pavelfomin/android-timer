@@ -39,6 +39,10 @@
             </intent-filter>
         </activity>
         
+        <activity
+            android:name="com.pvlf.android.timer.SettingsActivity"
+            android:label="@string/settings" />
+        
     </application>
 
 </manifest>
