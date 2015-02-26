@@ -191,8 +191,8 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 		Lap lap = run.endLap(currentTimeMillis);
 
 		//format lap entry
-		String entry = String.format("%d: %s - %s/mile", 
-				run.getLaps().size(), lap.toFormattedString(), Lap.formatDuration((long) (lap.getDuration() * lapsPerMile)));
+		String entry = String.format("%d: %s - %s", 
+				run.getLaps().size(), lap.toFormattedString(), Lap.formatDurationAsMinutesAndSeconds((long) (lap.getDuration() * lapsPerMile)));
 
 		//insert new lap at the beginning of the lap
 		adapter.insert(entry, 0);
@@ -249,7 +249,8 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
                     adapter.notifyDataSetChanged();
                     //reset run
                     run = null;
-                    textRunDuration.setText("");
+                    //set initial values
+                    updateTimerViewValues(0, 0, 0);
                 }
         });
         adb.show();
@@ -293,9 +294,9 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 		sb.append(" Max: ").append(Lap.formatDuration(statistic.getMaximum()));
 		sb.append(" Aver: ").append(Lap.formatDuration(statistic.getAverage()));
 		sb.append("\nTime per mile\n");
-		sb.append("Min: ").append(Lap.formatDuration((long) (statistic.getMinimum() * lapsPerMile)));
-		sb.append(" Max: ").append(Lap.formatDuration((long) (statistic.getMaximum() * lapsPerMile)));
-		sb.append(" Aver: ").append(Lap.formatDuration((long) (statistic.getAverage() * lapsPerMile)));
+		sb.append("Min: ").append(Lap.formatDurationAsMinutesAndSeconds((long) (statistic.getMinimum() * lapsPerMile)));
+		sb.append(" Max: ").append(Lap.formatDurationAsMinutesAndSeconds((long) (statistic.getMaximum() * lapsPerMile)));
+		sb.append(" Aver: ").append(Lap.formatDurationAsMinutesAndSeconds((long) (statistic.getAverage() * lapsPerMile)));
 		
 		return sb.toString();
 	}

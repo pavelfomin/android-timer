@@ -51,6 +51,15 @@ public class Lap {
         return String.format("%d:%d:%02d:%02d", hours, minutes, seconds, (millis % 1000) / 10);
     }
 	
+	public static String formatDurationAsMinutesAndSeconds(long millis) {
+		
+		int seconds = (int) (millis / 1000);
+		int minutes = seconds / 60;
+		seconds = seconds % 60;
+		
+		return String.format("%d:%02d", minutes, seconds);
+	}
+	
 	public String toFormattedString() {
 		return formatDuration(getDuration());
 	}
