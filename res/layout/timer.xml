@@ -18,7 +18,7 @@
             style="@style/TimerTextLarge"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center|left"
+            android:gravity="center"
             android:singleLine="true"
             />
 
@@ -56,7 +56,6 @@
             style="@style/TimerTextNormal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@android:drawable/ic_menu_delete"
             android:onClick="reset"
             android:text="@string/reset" />
 
