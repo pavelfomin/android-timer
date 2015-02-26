@@ -8,6 +8,7 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -30,7 +31,7 @@ import com.pvlf.android.timer.model.Statistic;
  * Main timer activity.
  *
  */
-public class TimerActivity extends ListActivity {
+public class TimerActivity extends ListActivity implements OnSharedPreferenceChangeListener {
 	private static final String TAG = TimerActivity.class.getName();
 
 	private static final String LAPS_PER_MILE_KEY = "lapsPerMile";
@@ -39,6 +40,8 @@ public class TimerActivity extends ListActivity {
 	private TextView textLapDuration;
 	private TextView textLaps;
     
+	private float lapsPerMile;
+
     private Run run;
 
 	/**
@@ -79,11 +82,13 @@ public class TimerActivity extends ListActivity {
 		//reset default values only on the first ever read
 		PreferenceManager.setDefaultValues(getBaseContext(), R.xml.preferences, false);
 
-		//ListView listView = (ListView) findViewById(android.R.id.list);
-		//enable long click event for list items
-		//listView.setLongClickable(true);
-		//attach the LongClickListener to the list
-		//listView.setOnItemLongClickListener(new FavoritesLongClickListener());
+		//get default shared preferences 
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		//register listener for settings changes
+		sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+
+		//initialize configured preferences
+		lapsPerMile = getConfiguredLapsPerMile(sharedPreferences);
 
 		//initialize list from saved json file
 		setListAdapter(createArrayAdapter());
@@ -185,8 +190,12 @@ public class TimerActivity extends ListActivity {
 		//end the current lap
 		Lap lap = run.endLap(currentTimeMillis);
 
+		//format lap entry
+		String entry = String.format("%d: %s - %s/mile", 
+				run.getLaps().size(), lap.toFormattedString(), Lap.formatDuration((long) (lap.getDuration() * lapsPerMile)));
+
 		//insert new lap at the beginning of the lap
-		adapter.insert(String.format("%d: %s", run.getLaps().size(), lap.toFormattedString()), 0);
+		adapter.insert(entry, 0);
 		//notify adapter of the changes made to force the data refresh
 		adapter.notifyDataSetChanged();
 	}
@@ -271,20 +280,13 @@ public class TimerActivity extends ListActivity {
 	}
 
 
+	/**
+	 * Formats the statistic.
+	 * @param statistic
+	 * @return formatted statistic
+	 */
 	private String formatStatistic(Statistic statistic) {
 
-		//get default shared preferences 
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-		//get currently configured value for laps per mile
-    	float lapsPerMile = 1;
-		
-		try {
-			lapsPerMile = Float.parseFloat(sharedPreferences.getString(LAPS_PER_MILE_KEY, "1"));
-		} catch (NumberFormatException e) {
-			Log.w(TAG, "Run statistic: laps per mile value can't be parsed", e);
-		}
-    	
 		StringBuilder sb = new StringBuilder();
 		sb.append("Time per lap\n");
 		sb.append("Min: ").append(Lap.formatDuration(statistic.getMinimum()));
@@ -296,6 +298,24 @@ public class TimerActivity extends ListActivity {
 		sb.append(" Aver: ").append(Lap.formatDuration((long) (statistic.getAverage() * lapsPerMile)));
 		
 		return sb.toString();
+	}
+
+	/**
+	 * Returns the configured laps per mile value.
+	 * @return configured laps per mile value.
+	 */
+	private float getConfiguredLapsPerMile(SharedPreferences sharedPreferences) {
+
+		//get currently configured value for laps per mile
+    	float lapsPerMile = 1;
+		
+		try {
+			lapsPerMile = Float.parseFloat(sharedPreferences.getString(LAPS_PER_MILE_KEY, "1"));
+		} catch (NumberFormatException e) {
+			Log.w(TAG, "Run statistic: laps per mile value can't be parsed", e);
+		}
+		
+		return lapsPerMile;
 	}
 	
 	/**
@@ -325,6 +345,21 @@ public class TimerActivity extends ListActivity {
 		//Return false to allow normal menu processing to proceed, true to consume it here.
 		return true;
 	}
+
+	/**
+	 * Called when a shared preference is changed, added, or removed.
+	 */
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+    	Log.v(TAG, "changed setting key="+ key +" values="+ sharedPreferences.getAll());
+    	
+        if (LAPS_PER_MILE_KEY.equals(key)) {
+    		//re-initialize configured preferences
+    		lapsPerMile = getConfiguredLapsPerMile(sharedPreferences);
+        }
+
+    }
 
 }
 
