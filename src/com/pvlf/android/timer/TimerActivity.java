@@ -35,7 +35,9 @@ public class TimerActivity extends ListActivity {
 
 	private static final String LAPS_PER_MILE_KEY = "lapsPerMile";
 
-    private TextView timerTextView;
+    private TextView textRunDuration;
+	private TextView textLapDuration;
+	private TextView textLaps;
     
     private Run run;
 
@@ -86,7 +88,12 @@ public class TimerActivity extends ListActivity {
 		//initialize list from saved json file
 		setListAdapter(createArrayAdapter());
         
-        timerTextView = (TextView) findViewById(R.id.textDuration);
+        textRunDuration = (TextView) findViewById(R.id.textRunDuration);
+        textLapDuration = (TextView) findViewById(R.id.textLapDuration);
+        textLaps = (TextView) findViewById(R.id.textLaps);
+
+        //set initial values
+        updateTimerViewValues(0, 0, 0);
     }
 
     @Override
@@ -205,9 +212,15 @@ public class TimerActivity extends ListActivity {
 			timerHandler.postDelayed(timerRunnable, 100);
 		}
 		
-		timerTextView.setText(String.format("%s laps:%d %s", 
-        		Lap.formatDuration(runDuration), numberOfLaps, Lap.formatDuration(lapDuration)));
+		updateTimerViewValues(lapDuration, runDuration, numberOfLaps);
     }
+
+	private void updateTimerViewValues(long lapDuration, long runDuration, int numberOfLaps) {
+
+		textRunDuration.setText(Lap.formatDuration(runDuration));
+		textLapDuration.setText(Lap.formatDuration(lapDuration));
+		textLaps.setText(String.valueOf(numberOfLaps));
+	}
 
 	/**
 	 * Resets the timer.
@@ -227,7 +240,7 @@ public class TimerActivity extends ListActivity {
                     adapter.notifyDataSetChanged();
                     //reset run
                     run = null;
-                    timerTextView.setText("");
+                    textRunDuration.setText("");
                 }
         });
         adb.show();

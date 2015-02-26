@@ -18,6 +18,11 @@
     </style>
 
     <style name="TimerTextNormal" parent="@android:style/TextAppearance.Medium">
+		<item name="android:background">@drawable/btn_default_transparent_normal</item>
+   	</style>
+
+    <style name="TimerTextLarge" parent="@android:style/TextAppearance.Large">
+		<item name="android:background">@drawable/btn_default_transparent_normal</item>
 	</style>
 
     <style name="TimerTextSmall" parent="@android:style/TextAppearance.Small">
