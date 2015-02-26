@@ -5,7 +5,7 @@
         android:key="lapsPerMile"
         android:singleLine="true"
         android:defaultValue="1"
-        android:inputType="number"
+        android:numeric="decimal"
         android:summary="@string/lapsPerMileSummary"
         android:title="@string/lapsPerMileTitle" />
     
