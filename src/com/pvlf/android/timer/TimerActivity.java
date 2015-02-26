@@ -141,27 +141,34 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 		case KeyEvent.KEYCODE_VOLUME_DOWN:
 
 			if (action == KeyEvent.ACTION_DOWN) {
-				if (run == null) {
-					//start new run
-					run = new Run();
-					//post the timer update
-	                timerHandler.postDelayed(timerRunnable, 0);
-				} else if(run.isCompleted()) {
-					//resume run
-					run.resume();
-					//post the timer update
-	                timerHandler.postDelayed(timerRunnable, 0);
+				if (run == null || run.isCompleted()) {
+					startOrResumeRun();
 				} else {
 					endLap(currentTimeMillis);
 				}
 				//start new lap
 				run.addLap(new Lap(currentTimeMillis));
-				//Log.d(TAG, "dispatchKeyEvent run="+ run);
 			}
 			return true;
 		default:
 			return super.dispatchKeyEvent(event);
 		}
+	}
+
+	/**
+	 * Starts new or resumes completed run.
+	 */
+	private void startOrResumeRun() {
+		
+		if (run == null) {
+			//start new run
+			run = new Run();
+		} else {
+			//resume run
+			run.resume();
+		}
+		//post the timer update
+		timerHandler.postDelayed(timerRunnable, 0);
 	}
 
     /**
@@ -237,23 +244,27 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 	 */
 	public void reset(View button) {
 		
-		AlertDialog.Builder adb = new AlertDialog.Builder(this);
-        adb.setTitle(R.string.resetTimer);
-        adb.setMessage(getString(R.string.msg_resetTimer));
-        adb.setNegativeButton(getString(R.string.cancel), null);
-        adb.setPositiveButton(getString(R.string.ok), new AlertDialog.OnClickListener() {
-                public void onClick(DialogInterface dialog, int choice) {
-                	//remove all items from adapter
-                	adapter.clear();
-                	//notify adapter of the changes made to force the data refresh
-                    adapter.notifyDataSetChanged();
-                    //reset run
-                    run = null;
-                    //set initial values
-                    updateTimerViewValues(0, 0, 0);
-                }
-        });
-        adb.show();
+		if (run != null && run.isCompleted()) {
+			
+			AlertDialog.Builder adb = new AlertDialog.Builder(this);
+			adb.setTitle(R.string.resetTimer);
+			adb.setMessage(getString(R.string.msg_resetTimer));
+			adb.setNegativeButton(getString(R.string.cancel), null);
+			adb.setPositiveButton(getString(R.string.ok), new AlertDialog.OnClickListener() {
+				public void onClick(DialogInterface dialog, int choice) {
+					//remove all items from adapter
+					adapter.clear();
+					//notify adapter of the changes made to force the data refresh
+					adapter.notifyDataSetChanged();
+					//reset run
+					run = null;
+					//set initial values
+					updateTimerViewValues(0, 0, 0);
+				}
+			});
+			adb.show();
+		}
+		
 	}
 
 	/**
