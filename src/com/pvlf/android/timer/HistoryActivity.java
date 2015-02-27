@@ -114,7 +114,12 @@ public class HistoryActivity extends ListActivity {
                 	//remove all items from adapter
                 	adapter.clear();
                 	//remove all items from from storage
-                	JSONStorageUtility.removeAllEntities(HistoryActivity.this, HISTORY_FILE_NAME);
+                	try {
+						JSONStorageUtility.removeAllEntities(HistoryActivity.this, HISTORY_FILE_NAME);
+					} catch (Exception e) {
+						Log.e(TAG, e.getMessage(), e);
+						Toast.makeText(HistoryActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+					}
                 	//notify adapter of the changes made to force the data refresh
                     adapter.notifyDataSetChanged();
                 }
@@ -140,9 +145,13 @@ public class HistoryActivity extends ListActivity {
 	                	String item = adapter.getItem(position);
 	                	//remove selected run from adapter
 	                	adapter.remove(item);
-	                	//Run run = new Run(); //TODO: how can this one be created?
 						//remove selected run from storage
-						//TODO: JSONStorageUtility.remove(HistoryActivity.this, run , new RunWrapper(), HISTORY_FILE_NAME, HISTORY);
+						try {
+							JSONStorageUtility.remove(HistoryActivity.this, position, HISTORY_FILE_NAME, HISTORY);
+						} catch (Exception e) {
+							Log.e(TAG, e.getMessage(), e);
+							Toast.makeText(HistoryActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+						}
 						//notify adapter of the changes made to force the data refresh
 	                    adapter.notifyDataSetChanged();
 	                }

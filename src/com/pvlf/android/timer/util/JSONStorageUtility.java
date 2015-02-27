@@ -98,22 +98,26 @@ public abstract class JSONStorageUtility {
 	/**
 	 * Removes entities file.
 	 * @param context
+	 * @param fileName
+	 * @throws Exception 
 	 */
-	public static void removeAllEntities(Context context, String fileName) {
+	public static void removeAllEntities(Context context, String fileName) throws Exception {
 		File file = new File(context.getFilesDir(), fileName);
-		file.delete();
+		boolean deleted = file.delete();
+		if (! deleted) {
+			throw new Exception("Failed to remove file="+ fileName);
+		}
 	}
 	
 	/**
 	 * Removes an entity from the list and stores the file.
 	 * @param context
-     * @param entity new entity
-     * @param jsonSerializable instance of JSONSerializable
+     * @param position position of an entity to remove
      * @param fileName file name
      * @param jsonElement top json element
 	 * @throws Exception 
      */
-	public static <T> void remove(Context context, T entityToRemove, JSONSerializable<T> jsonSerializable, String fileName, String jsonElement) throws Exception {
+	public static <T> void remove(Context context, int position, String fileName, String jsonElement) throws Exception {
 		File file = new File(context.getFilesDir(), fileName);
 		try {
 			String data = StorageUtility.read(file);
@@ -123,9 +127,8 @@ public abstract class JSONStorageUtility {
 			//new list of entities, w/out entityToRemove
 			JSONArray newEntities = new JSONArray();
 			for (int i = 0; i < entities.length(); i++) {
-				JSONObject jsonEntity = entities.getJSONObject(i);
-				T entity = jsonSerializable.fromJSON(jsonEntity);
-				if (! entity.equals(entityToRemove)) {
+				if (i != position) {
+					JSONObject entity = entities.getJSONObject(i);
 					newEntities.put(entity);
 				}
 			}
