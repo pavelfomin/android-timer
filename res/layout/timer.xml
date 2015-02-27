@@ -11,6 +11,7 @@
 	    android:gravity="center_horizontal"
         android:orientation="horizontal" >
 
+        <!-- duration -->
 		<LinearLayout
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
@@ -33,6 +34,8 @@
 			    />
 		
 		</LinearLayout>
+		
+		<!-- distance -->
 		<LinearLayout
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
@@ -79,6 +82,14 @@
             android:layout_height="wrap_content"
             android:onClick="statistic"
             android:text="@string/statistic" />
+
+        <Button
+            android:id="@+id/buttonSave"
+            style="@style/TimerTextNormal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="save"
+            android:drawableStart="@android:drawable/ic_menu_save" />
     </LinearLayout>
 
     <!-- laps -->

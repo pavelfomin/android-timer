@@ -27,6 +27,8 @@ import android.widget.Toast;
 import com.pvlf.android.timer.model.Lap;
 import com.pvlf.android.timer.model.Run;
 import com.pvlf.android.timer.model.Statistic;
+import com.pvlf.android.timer.model.json.RunWrapper;
+import com.pvlf.android.timer.util.JSONStorageUtility;
 
 /**
  * Main timer activity.
@@ -36,6 +38,17 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 	private static final String TAG = TimerActivity.class.getName();
 
 	private static final String LAPS_PER_MILE_KEY = "lapsPerMile";
+
+	/**
+	 * JSON KEY for run history array.
+	 */
+	private static final String HISTORY = "history";
+	
+	/**
+	 * Name of the run history file.
+	 */
+    private static final String HISTORY_FILE_NAME = "history.json";
+	
 
     private TextView textRunDuration;
 	private TextView textLapDuration;
@@ -271,6 +284,8 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 				}
 			});
 			adb.show();
+		} else {
+			Toast.makeText(this, getString(R.string.msg_runNotComplete), Toast.LENGTH_SHORT).show();
 		}
 		
 	}
@@ -299,6 +314,24 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 		}
 	}
 
+	/**
+	 * Saves current run.
+	 * @param button
+	 */
+	public void save(View button) {
+
+		if (run != null && run.isCompleted()) {
+			try {
+				JSONStorageUtility.add(this, run, new RunWrapper(), HISTORY_FILE_NAME, HISTORY);
+				Toast.makeText(this, getString(R.string.msg_runSaved), Toast.LENGTH_SHORT).show();
+			} catch (Exception e) {
+				Log.e(TAG, e.getMessage(), e);
+				Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+			}
+		} else {
+			Toast.makeText(this, getString(R.string.msg_runNotComplete), Toast.LENGTH_SHORT).show();
+		}
+	}
 
 	/**
 	 * Formats the statistic.

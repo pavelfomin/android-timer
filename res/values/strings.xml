@@ -17,5 +17,7 @@
     <!-- messages -->
     <string name="msg_resetTimer">Reset timer data</string>
     <string name="msg_timerNotActive">Timer is not active</string>
+    <string name="msg_runSaved">Current run is saved</string>
+    <string name="msg_runNotComplete">Current run is not complete</string>
     
 </resources>
