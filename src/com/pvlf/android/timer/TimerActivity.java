@@ -1,5 +1,6 @@
 package com.pvlf.android.timer;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
     private TextView textRunDuration;
 	private TextView textLapDuration;
 	private TextView textLaps;
+	private TextView textDistance;
     
 	private float lapsPerMile;
 
@@ -96,6 +98,7 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
         textRunDuration = (TextView) findViewById(R.id.textRunDuration);
         textLapDuration = (TextView) findViewById(R.id.textLapDuration);
         textLaps = (TextView) findViewById(R.id.textLaps);
+        textDistance = (TextView) findViewById(R.id.textDistance);
 
         //set initial values
         updateTimerViewValues(0, 0, 0);
@@ -198,11 +201,13 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 		Lap lap = run.endLap(currentTimeMillis);
 
 		//format lap entry
-		String entry = String.format("%d: %s - %s", 
-				run.getLaps().size(), lap.toFormattedString(), Lap.formatDurationAsMinutesAndSeconds((long) (lap.getDuration() * lapsPerMile)));
+		StringBuilder sb = new StringBuilder();
+		sb.append(run.getLaps().size()).append(": ");
+		sb.append(lap.toFormattedString()).append(" - ");
+		sb.append(Lap.formatDurationAsMinutesAndSeconds((long) (lap.getDuration() * lapsPerMile)));
 
 		//insert new lap at the beginning of the lap
-		adapter.insert(entry, 0);
+		adapter.insert(sb.toString(), 0);
 		//notify adapter of the changes made to force the data refresh
 		adapter.notifyDataSetChanged();
 	}
@@ -236,6 +241,9 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 		textRunDuration.setText(Lap.formatDuration(runDuration));
 		textLapDuration.setText(Lap.formatDuration(lapDuration));
 		textLaps.setText(String.valueOf(numberOfLaps));
+		
+		DecimalFormat decimalFormat = new DecimalFormat("0.00"); 
+		textDistance.setText(decimalFormat.format(numberOfLaps / lapsPerMile));
 	}
 
 	/**
