@@ -1,6 +1,7 @@
 package com.pvlf.android.timer.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -9,7 +10,6 @@ import java.util.List;
 public class Run {
 
 	private final List<Lap> laps;
-	private String description;
 	private boolean completed;
 
 	public Run() {
@@ -60,11 +60,9 @@ public class Run {
 	}
 	
 	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
+		
+		Lap lap = (laps.isEmpty() ? null: laps.get(0));
+		return (lap == null ? "Empty run" : new Date(lap.getStart()) + ": "+ Lap.formatDuration(getDuration()));
 	}
 
 	public void end() {
@@ -114,7 +112,7 @@ public class Run {
 	
 	@Override
 	public String toString() {
-		return String.format("Run [laps=%s, description=%s]", laps, description);
+		return String.format("Run [laps=%s, description=%s]", laps, getDescription());
 	}
 	
 }

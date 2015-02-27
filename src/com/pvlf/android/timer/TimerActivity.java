@@ -39,17 +39,6 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 
 	private static final String LAPS_PER_MILE_KEY = "lapsPerMile";
 
-	/**
-	 * JSON KEY for run history array.
-	 */
-	private static final String HISTORY = "history";
-	
-	/**
-	 * Name of the run history file.
-	 */
-    private static final String HISTORY_FILE_NAME = "history.json";
-	
-
     private TextView textRunDuration;
 	private TextView textLapDuration;
 	private TextView textLaps;
@@ -322,7 +311,7 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 
 		if (run != null && run.isCompleted()) {
 			try {
-				JSONStorageUtility.add(this, run, new RunWrapper(), HISTORY_FILE_NAME, HISTORY);
+				JSONStorageUtility.add(this, run, new RunWrapper(), HistoryActivity.HISTORY_FILE_NAME, HistoryActivity.HISTORY);
 				Toast.makeText(this, getString(R.string.msg_runSaved), Toast.LENGTH_SHORT).show();
 			} catch (Exception e) {
 				Log.e(TAG, e.getMessage(), e);
@@ -390,8 +379,13 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		switch (item.getItemId()) {
+
 		case R.id.settings:
 			startActivity(new Intent(this, SettingsActivity.class));
+			break;
+
+		case R.id.history:
+			startActivity(new Intent(this, HistoryActivity.class));
 			break;
 		}
 

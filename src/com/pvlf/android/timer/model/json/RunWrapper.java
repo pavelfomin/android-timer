@@ -37,7 +37,6 @@ public class RunWrapper implements JSONSerializable<Run> {
 	public Run fromJSON(JSONObject json) throws JSONException {
 
 		Run run = new Run();
-		run.setDescription(json.getString(DESCRIPTION));
 
 		LapWrapper lapWrapper = new LapWrapper();
 		
