@@ -3,16 +3,21 @@
 
     <string name="app_name">Timer</string>
 
+    <!-- buttons -->
     <string name="reset">Reset</string>
     <string name="statistic">Statistic</string>
+    <string name="save">Save</string>
+
+    <!-- options -->
     <string name="settings">Settings</string>
-    <string name="resetTimer">Reset Timer</string>
     <string name="history">History</string>
-    
+
+    <!-- dialog messages -->
+    <string name="resetTimer">Reset Timer</string>
     <string name="removeAllHistoryEntries">Remove All History Entries</string>
     <string name="removeHistoryEntry">Remove History Entry</string>
 
-    <!-- buttons -->
+    <!-- dialog buttons -->
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
 
