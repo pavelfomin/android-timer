@@ -15,18 +15,18 @@ import com.pvlf.android.timer.model.RunContext;
  */
 public class RunWrapper implements JSONSerializable<Run> {
 
-	private static final String DESCRIPTION = "description";
 	private static final String LAPS = "laps";
 	private static final String RUN_CONTEXT = "runContext";
 
 	@Override
 	public JSONObject toJSON(Run run) throws JSONException {
 
-		LapWrapper lapWrapper = new LapWrapper();
-		
 		JSONObject json = new JSONObject();
-		json.put(DESCRIPTION, run.getDescription());
+
+		RunContextWrapper runContextWrapper = new RunContextWrapper();
+		json.put(RUN_CONTEXT, runContextWrapper.toJSON(run.getRunContext()));
 		
+		LapWrapper lapWrapper = new LapWrapper();
 		JSONArray array = new JSONArray();
 		for (Lap lap : run.getLaps()) {
 			array.put(lapWrapper.toJSON(lap));
