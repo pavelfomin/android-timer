@@ -15,6 +15,7 @@ public class LapWrapper implements JSONSerializable<Lap> {
 
 	private static final String START = "start";
 	private static final String DURATION = "duration";
+	private static final String POSITION = "position";
 
 	@Override
 	public JSONObject toJSON(Lap lap) throws JSONException {
@@ -23,6 +24,7 @@ public class LapWrapper implements JSONSerializable<Lap> {
 
 		json.put(START, lap.getStart());
 		json.put(DURATION, lap.getDuration());
+		json.put(POSITION, lap.getPosition());
 		
 		return json;
 	}
@@ -30,9 +32,7 @@ public class LapWrapper implements JSONSerializable<Lap> {
 	@Override
 	public Lap fromJSON(JSONObject json, Serializable context) throws JSONException {
 
-		Lap lap = new Lap(json.getLong(START), (RunContext) context);
-		lap.setDuration(json.getLong(DURATION));
-
+		Lap lap = new Lap(json.getLong(START), (RunContext) context, json.getInt(POSITION), json.getLong(DURATION));
 		return lap;
 	}
 }

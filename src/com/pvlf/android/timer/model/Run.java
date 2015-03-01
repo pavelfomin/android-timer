@@ -1,5 +1,8 @@
 package com.pvlf.android.timer.model;
 
+import android.annotation.SuppressLint;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -7,11 +10,11 @@ import java.util.List;
 /**
  * Holds the data for a run.
  */
-public class Run {
+public class Run implements Serializable {
+	private static final long serialVersionUID = -7490949038534165892L;
 
 	private final RunContext runContext;
 	private final List<Lap> laps;
-	private boolean completed;
 
 	public Run(RunContext runContext) {
 		
@@ -33,7 +36,7 @@ public class Run {
 
 	public Lap getLap(int position) {
 		
-		return (position < getLaps().size() ? getLaps().get(position) : null);
+		return (position >= 0 && position < getLaps().size() ? getLaps().get(position) : null);
 	}
 	
 	public boolean removeLap(Lap lapToRemove) {
@@ -46,28 +49,28 @@ public class Run {
 		if (removed) {
 			// get previous lap
 			Lap previous = getLap(--index);
-			
-			// transfer start time to the previous lap
-			previous.resetStart(lapToRemove.getStart());
-			
-			//reset positions for all preceding completed laps
-			for (int i = index; i >= 0; i--) {
-				Lap lap = getLap(i);
-
-				if (lap.isCompleted()) {
+			if (previous != null) {
+				// transfer start time to the previous lap
+				previous.resetStart(lapToRemove.getStart());
+				
+				//reset positions for all preceding completed laps
+				for (int i = index; i >= 0; i--) {
+					Lap lap = getLap(i);
 					lap.setPosition(lap.getPosition() - 1);
 				}
 			}
-			
 		}
 
 		return removed;
 	}
 	
-	public List<Lap> addLap(Lap lap) {
+	/**
+	 * Adds new lap at the beginning of the list.
+	 * @param lap
+	 */
+	public void addLap(Lap lap) {
 
 		getLaps().add(0, lap);
-		return getLaps();
 	}
 
 	/**
@@ -82,16 +85,14 @@ public class Run {
 	/**
 	 * Ends current lap.
 	 * @param currentTimeMillis
-	 * @param position 1-based lap position in a run 
 	 * @return current lap
 	 */
-	public Lap endLap(long currentTimeMillis, int position) {
+	public Lap endLap(long currentTimeMillis) {
 	
 		Lap lap = getCurrentLap();
 		if (lap != null) {
 			// end the current lap
 			lap.end(currentTimeMillis);
-			lap.setPosition(position);
 		}
 		return lap;
 	}
@@ -107,22 +108,26 @@ public class Run {
 		return duration;
 	}
 	
+	@SuppressLint("SimpleDateFormat")
 	public String getDescription() {
 		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		Lap lap = (getLaps().isEmpty() ? null: getLaps().get(getLaps().size() - 1));
-		return (lap == null ? "Empty run" : new Date(lap.getStart()) + ": "+ Lap.formatDuration(getDuration()));
-	}
-
-	public void end() {
-		completed = true;
-	}
-
-	public void resume() {
-		completed = false;
+		
+		StringBuilder sb = new StringBuilder();
+		if (lap == null) {
+			sb.append("Empty run");
+		} else {
+			sb.append(format.format(new Date(lap.getStart())));
+			sb.append(" - ").append(Lap.formatDuration(getDuration()));
+		}
+		return sb.toString();
 	}
 	
 	public boolean isCompleted() {
-		return completed;
+		
+		Lap lap = getCurrentLap();
+		return (lap != null && lap.isCompleted());
 	}
 
 	/**
@@ -160,7 +165,7 @@ public class Run {
 	
 	@Override
 	public String toString() {
-		return String.format("Run [laps=%s, description=%s]", getLaps(), getDescription());
+		return getDescription();
 	}
 
 }

@@ -43,7 +43,7 @@ public class HistoryActivity extends ListActivity {
 	 * The Adapter is also responsible for making a {@link android.view.View} for
 	 * each item in the data set.
 	 */
-	private ArrayAdapter<String> adapter;
+	private ArrayAdapter<Run> adapter;
 
 	private RunContext runContext;
 
@@ -72,20 +72,20 @@ public class HistoryActivity extends ListActivity {
      * Creates new adapter using history data.
      * @return new instance of ArrayAdapter
      */
-    private ArrayAdapter<String> createArrayAdapter() {
+    private ArrayAdapter<Run> createArrayAdapter() {
 
-    	List<String> items = new ArrayList<String>();
+    	List<Run> items = new ArrayList<Run>();
     	List<Run> list;
 		try {
 			list = JSONStorageUtility.getList(this, new RunWrapper(), HISTORY_FILE_NAME, HISTORY, runContext);
 	    	for (Run run : list) {
-	    		items.add(run.getDescription());
+	    		items.add(run);
 			}
 		} catch (Exception e) {
 			Log.e(TAG, "Failed to get the history", e);
 			Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
 		}
-    	adapter = new ArrayAdapter<String>(this, R.layout.run, items);
+    	adapter = new ArrayAdapter<Run>(this, R.layout.run, items);
     	Log.d(TAG, "Created new adapter="+ adapter );
 		return adapter;
     }
@@ -101,8 +101,7 @@ public class HistoryActivity extends ListActivity {
 		//A new back stack is created with MainActivity at the top, and using singleTop ensures that MainActivity is created only once
 		//since MainActivity is now on top due to FLAG_ACTIVITY_CLEAR_TOP
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		//TODO: String location = adapter.getItem(position);
-	    //TODO: intent.putExtra(TimerActivity.FAVORITE_LOCATION_PARAMETER, location);
+	    intent.putExtra(TimerActivity.RUN_PARAMETER, adapter.getItem(position));
 	    startActivity(intent);
 	}
 
@@ -148,9 +147,9 @@ public class HistoryActivity extends ListActivity {
 	        adb.setPositiveButton(getString(R.string.ok), new AlertDialog.OnClickListener() {
 	                public void onClick(DialogInterface dialog, int choice) {
 	                	//obtain selected run from adapter
-	                	String item = adapter.getItem(position);
+	                	Run run = adapter.getItem(position);
 	                	//remove selected run from adapter
-	                	adapter.remove(item);
+	                	adapter.remove(run);
 						//remove selected run from storage
 						try {
 							JSONStorageUtility.remove(HistoryActivity.this, position, HISTORY_FILE_NAME, HISTORY);

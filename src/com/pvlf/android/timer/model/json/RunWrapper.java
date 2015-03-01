@@ -41,25 +41,21 @@ public class RunWrapper implements JSONSerializable<Run> {
 	public Run fromJSON(JSONObject json, Serializable context) throws JSONException {
 
 		//deserialize run context
-		RunContext runContext;
-		try {
-			JSONObject runContextJson = json.getJSONObject(RUN_CONTEXT);
-			RunContextWrapper runContextWrapper = new RunContextWrapper();
-			runContext = runContextWrapper.fromJSON(runContextJson, context);
-		} catch (JSONException e) {
-			//use default run context passed in (for backwards compatibility)
-			runContext = (RunContext) context;
-		}
+		JSONObject runContextJson = json.getJSONObject(RUN_CONTEXT);
+		RunContextWrapper runContextWrapper = new RunContextWrapper();
+		RunContext runContext = runContextWrapper.fromJSON(runContextJson, context);
 
 		//create run using the run context
 		Run run = new Run(runContext);
 
-		//deserialize laps using the run context
+		//deserialize laps using the run's context
 		LapWrapper lapWrapper = new LapWrapper();
 		JSONArray laps = json.getJSONArray(LAPS);
 		for (int i = 0; i < laps.length(); i++) {
 			Lap lap = lapWrapper.fromJSON(laps.getJSONObject(i), runContext);
-			run.addLap(lap);
+			//laps are in reversed order already
+			//add to the end to retain the order
+			run.getLaps().add(lap);
 		}
 		
 		return run;

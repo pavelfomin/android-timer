@@ -74,6 +74,32 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
         }
     };
 
+	/**
+	 * Called when activity is started with intent using Intent.FLAG_ACTIVITY_CLEAR_TOP.
+	 * See {@link MainActivity#onListItemClick} for more details.
+	 */
+	@Override
+	protected void onNewIntent(Intent intent) {
+		
+		super.onNewIntent(intent);
+		Log.d(TAG, "onNewIntent intent="+ intent);
+
+		//initialize timer with an instance of the Run passed in
+		Run run = (Run) intent.getSerializableExtra(RUN_PARAMETER);
+		if (run != null) {
+			this.run = run;
+
+			adapter.clear();
+			for (Lap lap : run.getLaps()) {
+				//laps are in reversed order already
+				//add to the end to retain the correct order
+				adapter.add(lap);
+			}
+			
+			updateTimerView();
+		}
+	}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -127,55 +153,62 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 		
 		case KeyEvent.KEYCODE_VOLUME_UP:
 			if (action == KeyEvent.ACTION_DOWN) {
-                if (run != null && (! run.isCompleted())) {
-                	//end run
-					endRun(currentTimeMillis);
-					
-					//remove any pending posts from the message queue
-					timerHandler.removeCallbacks(timerRunnable);
-					
-					//update timer view one more time
-					updateTimerView();
-					
-					//show statistic
-					statistic(null);
-				} else {
-					Toast.makeText(this, getString(R.string.msg_timerNotActive), Toast.LENGTH_SHORT).show();
-				}
+                endRun(currentTimeMillis);
 			}
 			return true;
 		
 		case KeyEvent.KEYCODE_VOLUME_DOWN:
-
 			if (action == KeyEvent.ACTION_DOWN) {
-				if (run == null || run.isCompleted()) {
-					startOrResumeRun();
-				} else {
-					endLap(currentTimeMillis);
-				}
-				//start new lap
-				run.addLap(new Lap(currentTimeMillis, runContext));
+				startLap(currentTimeMillis);
 			}
 			return true;
+
 		default:
 			return super.dispatchKeyEvent(event);
 		}
 	}
 
 	/**
-	 * Starts new or resumes completed run.
+	 * Ends run.
+	 * @param currentTimeMillis
 	 */
-	private void startOrResumeRun() {
+	private void endRun(long currentTimeMillis) {
 		
+		if (run != null && (! run.isCompleted())) {
+			//end run by ending the current lap
+			endLap(currentTimeMillis);
+			
+			//remove any pending posts from the message queue
+			timerHandler.removeCallbacks(timerRunnable);
+			
+			//update timer view one more time
+			updateTimerView();
+		} else {
+			Toast.makeText(this, getString(R.string.msg_timerNotActive), Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	/**
+	 * Starts new lap. Creates new or resumes an existing run if needed.
+	 */
+	private void startLap(long currentTimeMillis) {
+		
+		boolean startOrResume = (run == null || run.isCompleted());  
 		if (run == null) {
 			//start new run
 			run = new Run(runContext);
-		} else {
-			//resume run
-			run.resume();
+		} else if(! run.isCompleted()) {
+			//end current lap
+			endLap(currentTimeMillis);
 		}
-		//post the timer update
-		timerHandler.postDelayed(timerRunnable, 0);
+
+		//start new lap
+		run.addLap(new Lap(currentTimeMillis, runContext, run.getLapsNumber() + 1));
+		
+		if (startOrResume) {
+			//post the initial timer update
+			timerHandler.postDelayed(timerRunnable, 0);
+		}
 	}
 
     /**
@@ -190,19 +223,10 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 		return adapter;
     }
 
-	private void endRun(long currentTimeMillis) {
-		
-		//end the current lap
-		endLap(currentTimeMillis);
-
-		//finalize the run
-		run.end();
-	}
-	
 	private void endLap(long currentTimeMillis) {
 
 		//end the current lap
-		Lap lap = run.endLap(currentTimeMillis, run.getLapsNumber());
+		Lap lap = run.endLap(currentTimeMillis);
 
 		//insert new lap at the beginning of the list
 		adapter.insert(lap, 0);
