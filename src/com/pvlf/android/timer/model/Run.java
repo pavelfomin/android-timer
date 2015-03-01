@@ -19,10 +19,48 @@ public class Run {
 	public List<Lap> getLaps() {
 		return laps;
 	}
+	
+	public int getLapsNumber() {
+		return getLaps().size();
+	}
 
+	public Lap getLap(int position) {
+		
+		return (position < getLaps().size() ? getLaps().get(position) : null);
+	}
+	
+	public boolean removeLap(Lap lapToRemove) {
+		
+		int index = laps.indexOf(lapToRemove);
+		lapToRemove = getLaps().remove(index);
+
+		boolean removed = (lapToRemove != null);
+		
+		if (removed) {
+			// get previous lap
+			Lap previous = getLap(--index);
+			
+			// transfer start time to the previous lap
+			previous.resetStart(lapToRemove.getStart());
+			
+			//reset positions for all preceding completed laps
+			for (int i = index; i >= 0; i--) {
+				Lap lap = getLap(i);
+
+				if (lap.isCompleted()) {
+					lap.setPosition(lap.getPosition() - 1);
+				}
+			}
+			
+		}
+
+		return removed;
+	}
+	
 	public List<Lap> addLap(Lap lap) {
-		laps.add(lap);
-		return laps;
+
+		getLaps().add(0, lap);
+		return getLaps();
 	}
 
 	/**
@@ -30,20 +68,23 @@ public class Run {
 	 * @return current lap.
 	 */
 	public Lap getCurrentLap() {
-		return (laps.isEmpty() ? null : laps.get(laps.size() - 1));
+		
+		return (getLaps().isEmpty() ? null : getLaps().get(0));
 	}
 
 	/**
 	 * Ends current lap.
 	 * @param currentTimeMillis
+	 * @param position 1-based lap position in a run 
 	 * @return current lap
 	 */
-	public Lap endLap(long currentTimeMillis) {
+	public Lap endLap(long currentTimeMillis, int position) {
 	
 		Lap lap = getCurrentLap();
 		if (lap != null) {
 			// end the current lap
 			lap.end(currentTimeMillis);
+			lap.setPosition(position);
 		}
 		return lap;
 	}
@@ -52,7 +93,7 @@ public class Run {
 		
 		long duration = 0;
 		
-		for (Lap lap : laps) {
+		for (Lap lap : getLaps()) {
 			duration += lap.getDuration();
 		}
 
@@ -61,7 +102,7 @@ public class Run {
 	
 	public String getDescription() {
 		
-		Lap lap = (laps.isEmpty() ? null: laps.get(0));
+		Lap lap = (getLaps().isEmpty() ? null: getLaps().get(getLaps().size() - 1));
 		return (lap == null ? "Empty run" : new Date(lap.getStart()) + ": "+ Lap.formatDuration(getDuration()));
 	}
 
@@ -88,7 +129,7 @@ public class Run {
 		long totalDuration = 0;
 		int totalCompleted = 0;
 		
-		for (Lap lap : laps) {
+		for (Lap lap : getLaps()) {
 			if (lap.isCompleted()) {
 				long duration = lap.getDuration();
 				if (duration > maximum) {
@@ -112,7 +153,7 @@ public class Run {
 	
 	@Override
 	public String toString() {
-		return String.format("Run [laps=%s, description=%s]", laps, getDescription());
+		return String.format("Run [laps=%s, description=%s]", getLaps(), getDescription());
 	}
-	
+
 }

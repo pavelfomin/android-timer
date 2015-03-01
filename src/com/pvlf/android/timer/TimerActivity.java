@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,7 +56,7 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 	 * The Adapter is also responsible for making a {@link android.view.View} for
 	 * each item in the data set.
 	 */
-	private ArrayAdapter<String> adapter;
+	private ArrayAdapter<Lap> adapter;
     
 	/**
 	 * Handler to use instead of a timer. 
@@ -94,9 +95,15 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 		//initialize configured preferences
 		lapsPerMile = getConfiguredLapsPerMile(sharedPreferences);
 
-		//initialize list from saved json file
+		//set the list data adapter
 		setListAdapter(createArrayAdapter());
         
+		ListView listView = (ListView) findViewById(android.R.id.list);
+		//enable long click event for list items
+		listView.setLongClickable(true);
+		//attach the LongClickListener to the list
+		listView.setOnItemLongClickListener(new LapsLongClickListener());
+		
         textRunDuration = (TextView) findViewById(R.id.textRunDuration);
         textLapDuration = (TextView) findViewById(R.id.textLapDuration);
         textLaps = (TextView) findViewById(R.id.textLaps);
@@ -104,13 +111,6 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 
         //set initial values
         updateTimerViewValues(0, 0, 0);
-    }
-
-    @Override
-    public void onPause() {
-
-    	super.onPause();
-        //timerHandler.removeCallbacks(timerRunnable);
     }
 
 	@Override
@@ -180,10 +180,10 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
      * Creates new adapter using favorites data.
      * @return new instance of ArrayAdapter
      */
-    private ArrayAdapter<String> createArrayAdapter() {
+    private ArrayAdapter<Lap> createArrayAdapter() {
     	
-    	List<String> items = new ArrayList<String>();
-    	adapter = new ArrayAdapter<String>(this, R.layout.lap, items);
+    	List<Lap> items = new ArrayList<Lap>();
+    	adapter = new ArrayAdapter<Lap>(this, R.layout.lap, items);
     	Log.d(TAG, "Created new adapter="+ adapter );
 		return adapter;
     }
@@ -200,16 +200,11 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 	private void endLap(long currentTimeMillis) {
 
 		//end the current lap
-		Lap lap = run.endLap(currentTimeMillis);
-
-		//format lap entry
-		StringBuilder sb = new StringBuilder();
-		sb.append(run.getLaps().size()).append(": ");
-		sb.append(lap.toFormattedString()).append(" - ");
-		sb.append(Lap.formatDurationAsMinutesAndSeconds((long) (lap.getDuration() * lapsPerMile)));
+		Lap lap = run.endLap(currentTimeMillis, run.getLapsNumber());
 
 		//insert new lap at the beginning of the lap
-		adapter.insert(sb.toString(), 0);
+		adapter.insert(lap, 0);
+
 		//notify adapter of the changes made to force the data refresh
 		adapter.notifyDataSetChanged();
 	}
@@ -222,7 +217,7 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
     	long lapDuration;
     	long runDuration = run.getDuration();
     	Lap lap = run.getCurrentLap();
-    	int numberOfLaps = run.getLaps().size();
+    	int numberOfLaps = run.getLapsNumber();
     	
     	if (run.isCompleted()) {
 			lapDuration = lap.getDuration();
@@ -407,6 +402,43 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
         }
 
     }
+
+	/**
+	 * Laps Long Click Listener that processes the long click event. 
+	 *
+	 */
+	private class LapsLongClickListener implements AdapterView.OnItemLongClickListener {
+
+		@Override
+		public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+			
+			AlertDialog.Builder adb = new AlertDialog.Builder(TimerActivity.this);
+	        adb.setTitle(R.string.removeLapsEntry);
+	        adb.setMessage(getString(R.string.removeLapsEntry));
+	        adb.setNegativeButton(getString(R.string.cancel), null);
+	        adb.setPositiveButton(getString(R.string.ok), new AlertDialog.OnClickListener() {
+	                
+				public void onClick(DialogInterface dialog, int choice) {
+
+					// obtain selected lap from adapter
+					Lap lap = adapter.getItem(position);
+
+					// remove selected lap from the run
+					if (run.removeLap(lap)) {
+						// remove selected lap from adapter
+						adapter.remove(lap);
+						// notify adapter of the changes made to force the data refresh
+						adapter.notifyDataSetChanged();
+					} else {
+						Log.e(TAG, "Lap wasn't removed at position=" + position);
+						
+					}
+				}
+	        });
+	        adb.show();
+			return true;
+		}
+	}
 
 }
 

@@ -16,6 +16,7 @@
     <string name="resetTimer">Reset Timer</string>
     <string name="removeAllHistoryEntries">Remove All History Entries</string>
     <string name="removeHistoryEntry">Remove History Entry</string>
+    <string name="removeLapsEntry">Remove Lap</string>
 
     <!-- dialog buttons -->
     <string name="ok">OK</string>

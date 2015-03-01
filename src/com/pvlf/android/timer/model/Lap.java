@@ -5,26 +5,54 @@ package com.pvlf.android.timer.model;
  */
 public class Lap {
 
-	private final long start;
+	/**
+	 * Start time in milliseconds.
+	 */
+	private long start;
+	
+	/**
+	 * Position in the run, 1-based.
+	 */
+	private int position;
+
+	/**
+	 * Duration in milliseconds.
+	 */
 	private long duration;
 	
-	public Lap() {
-		this.start = System.currentTimeMillis();
-	}
-
+	/**
+	 * Creates new instance with a specific time.
+	 */
 	public Lap(long start) {
-		this.start = start;
+		this.resetStart(start);
 	}
 
 	public long getStart() {
 		return start;
 	}
 
+	public void resetStart(long newStart) {
+
+		if (isCompleted()) {
+			//adjust duration for a completed lap
+			setDuration(getDuration() + getStart() - newStart);
+		}
+		this.start = newStart;
+	}
+
+	public int getPosition() {
+		return position;
+	}
+
+	public void setPosition(int position) {
+		this.position = position;
+	}
+
 	public long getDuration() {
 		return duration;
 	}
 
-	public void setDuration(long duration) {
+	public  void setDuration(long duration) {
 		this.duration = duration;
 	}
 
@@ -60,12 +88,14 @@ public class Lap {
 		return String.format("%d:%02d", minutes, seconds);
 	}
 	
-	public String toFormattedString() {
-		return formatDuration(getDuration());
-	}
-
 	@Override
 	public String toString() {
-		return String.format("Lap [start=%s, duration=%s]", getStart(), getDuration());
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(getPosition()).append(": ");
+		sb.append(formatDuration(getDuration())).append(" - ");
+		//TODO: add sb.append(formatDurationAsMinutesAndSeconds((long) (getDuration() * lapsPerMile)));
+
+		return sb.toString(); 
 	}
 }

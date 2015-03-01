@@ -73,7 +73,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="reset"
-            android:text="@string/reset" />
+            android:text="@string/reset" 
+            android:drawableStart="@android:drawable/ic_menu_delete"
+            />
 
         <Button
             android:id="@+id/buttonStatistic"
@@ -81,7 +83,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="statistic"
-            android:text="@string/statistic" />
+            android:text="@string/statistic" 
+            />
 
         <Button
             android:id="@+id/buttonSave"
@@ -90,7 +93,8 @@
             android:layout_height="wrap_content"
             android:onClick="save"
             android:text="@string/save"
-            android:drawableStart="@android:drawable/ic_menu_save" />
+            android:drawableStart="@android:drawable/ic_menu_save" 
+            />
     </LinearLayout>
 
     <!-- laps -->
