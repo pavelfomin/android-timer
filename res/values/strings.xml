@@ -23,8 +23,8 @@
     <string name="cancel">Cancel</string>
 
     <!-- Settings -->
-    <string name="lapsPerMileSummary">Specify the number of laps per mile</string>
-    <string name="lapsPerMileTitle">Laps Per Mile</string>
+    <string name="lapsPerUnitOfDistanceSummary">Specify the number of laps per unit of distance e.g. mile, kilometer, etc</string>
+    <string name="lapsPerUnitOfDistanceTitle">Laps Per Unit Of Distance</string>
     
     <!-- messages -->
     <string name="msg_resetTimer">Reset timer data</string>

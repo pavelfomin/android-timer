@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.pvlf.android.timer.model.Lap;
 import com.pvlf.android.timer.model.Run;
+import com.pvlf.android.timer.model.RunContext;
 import com.pvlf.android.timer.model.Statistic;
 import com.pvlf.android.timer.model.json.RunWrapper;
 import com.pvlf.android.timer.util.JSONStorageUtility;
@@ -38,14 +39,15 @@ import com.pvlf.android.timer.util.JSONStorageUtility;
 public class TimerActivity extends ListActivity implements OnSharedPreferenceChangeListener {
 	private static final String TAG = TimerActivity.class.getName();
 
-	private static final String LAPS_PER_MILE_KEY = "lapsPerMile";
-
+	static final String RUN_CONTEXT_PARAMETER = TimerActivity.class.getName() + ".RUN_CONTEXT";
+	static final String RUN_PARAMETER = TimerActivity.class.getName() + ".RUN";
+	
     private TextView textRunDuration;
 	private TextView textLapDuration;
 	private TextView textLaps;
 	private TextView textDistance;
     
-	private float lapsPerMile;
+	private RunContext runContext;
 
     private Run run;
 
@@ -92,8 +94,8 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 		//register listener for settings changes
 		sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
-		//initialize configured preferences
-		lapsPerMile = getConfiguredLapsPerMile(sharedPreferences);
+		//initialize the run context
+		runContext = new RunContext(sharedPreferences);
 
 		//set the list data adapter
 		setListAdapter(createArrayAdapter());
@@ -152,7 +154,7 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 					endLap(currentTimeMillis);
 				}
 				//start new lap
-				run.addLap(new Lap(currentTimeMillis));
+				run.addLap(new Lap(currentTimeMillis, runContext));
 			}
 			return true;
 		default:
@@ -167,7 +169,7 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 		
 		if (run == null) {
 			//start new run
-			run = new Run();
+			run = new Run(runContext);
 		} else {
 			//resume run
 			run.resume();
@@ -202,7 +204,7 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 		//end the current lap
 		Lap lap = run.endLap(currentTimeMillis, run.getLapsNumber());
 
-		//insert new lap at the beginning of the lap
+		//insert new lap at the beginning of the list
 		adapter.insert(lap, 0);
 
 		//notify adapter of the changes made to force the data refresh
@@ -240,7 +242,7 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 		textLaps.setText(String.valueOf(numberOfLaps));
 		
 		DecimalFormat decimalFormat = new DecimalFormat("0.00"); 
-		textDistance.setText(decimalFormat.format(numberOfLaps / lapsPerMile));
+		textDistance.setText(decimalFormat.format(numberOfLaps / runContext.getLapsPerUnitOfDistance()));
 	}
 
 	/**
@@ -325,36 +327,22 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 	private String formatStatistic(Statistic statistic) {
 
 		StringBuilder sb = new StringBuilder();
+		
 		sb.append("Time per lap\n");
 		sb.append("Min: ").append(Lap.formatDuration(statistic.getMinimum()));
 		sb.append(" Max: ").append(Lap.formatDuration(statistic.getMaximum()));
 		sb.append(" Aver: ").append(Lap.formatDuration(statistic.getAverage()));
+		
+		float lapsPerUnitOfDistance = runContext.getLapsPerUnitOfDistance();
+
 		sb.append("\nTime per mile\n");
-		sb.append("Min: ").append(Lap.formatDurationAsMinutesAndSeconds((long) (statistic.getMinimum() * lapsPerMile)));
-		sb.append(" Max: ").append(Lap.formatDurationAsMinutesAndSeconds((long) (statistic.getMaximum() * lapsPerMile)));
-		sb.append(" Aver: ").append(Lap.formatDurationAsMinutesAndSeconds((long) (statistic.getAverage() * lapsPerMile)));
+		sb.append("Min: ").append(Lap.formatDurationAsMinutesAndSeconds((long) (statistic.getMinimum() * lapsPerUnitOfDistance)));
+		sb.append(" Max: ").append(Lap.formatDurationAsMinutesAndSeconds((long) (statistic.getMaximum() * lapsPerUnitOfDistance)));
+		sb.append(" Aver: ").append(Lap.formatDurationAsMinutesAndSeconds((long) (statistic.getAverage() * lapsPerUnitOfDistance)));
 		
 		return sb.toString();
 	}
 
-	/**
-	 * Returns the configured laps per mile value.
-	 * @return configured laps per mile value.
-	 */
-	private float getConfiguredLapsPerMile(SharedPreferences sharedPreferences) {
-
-		//get currently configured value for laps per mile
-    	float lapsPerMile = 1;
-		
-		try {
-			lapsPerMile = Float.parseFloat(sharedPreferences.getString(LAPS_PER_MILE_KEY, "1"));
-		} catch (NumberFormatException e) {
-			Log.w(TAG, "Run statistic: laps per mile value can't be parsed", e);
-		}
-		
-		return lapsPerMile;
-	}
-	
 	/**
 	 * Initialize the contents of the Activity's standard options menu.
 	 * The content of the menu is defined in /res/menu/main.xml.
@@ -380,7 +368,9 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 			break;
 
 		case R.id.history:
-			startActivity(new Intent(this, HistoryActivity.class));
+			Intent intent = new Intent(this, HistoryActivity.class);
+			intent.putExtra(RUN_CONTEXT_PARAMETER, runContext);
+			startActivity(intent);
 			break;
 		}
 
@@ -396,9 +386,9 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 
     	Log.v(TAG, "changed setting key="+ key +" values="+ sharedPreferences.getAll());
     	
-        if (LAPS_PER_MILE_KEY.equals(key)) {
-    		//re-initialize configured preferences
-    		lapsPerMile = getConfiguredLapsPerMile(sharedPreferences);
+        if (RunContext.LAPS_PER_UNIT_OF_DISTANCE_KEY.equals(key)) {
+    		//re-initialize run context with configured preferences
+    		runContext.reset(sharedPreferences);
         }
 
     }
@@ -427,8 +417,14 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 					if (run.removeLap(lap)) {
 						// remove selected lap from adapter
 						adapter.remove(lap);
+						
 						// notify adapter of the changes made to force the data refresh
 						adapter.notifyDataSetChanged();
+						
+						//update Timer View if run is complete
+						if (run.isCompleted()) {
+							updateTimerView();
+						}
 					} else {
 						Log.e(TAG, "Lap wasn't removed at position=" + position);
 						

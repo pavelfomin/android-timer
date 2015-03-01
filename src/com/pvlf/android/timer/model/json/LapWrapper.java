@@ -1,9 +1,12 @@
 package com.pvlf.android.timer.model.json;
 
+import java.io.Serializable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.pvlf.android.timer.model.Lap;
+import com.pvlf.android.timer.model.RunContext;
 
 /**
  * Lap JSON wrapper. 
@@ -25,9 +28,9 @@ public class LapWrapper implements JSONSerializable<Lap> {
 	}
 
 	@Override
-	public Lap fromJSON(JSONObject json) throws JSONException {
+	public Lap fromJSON(JSONObject json, Serializable context) throws JSONException {
 
-		Lap lap = new Lap(json.getLong(START));
+		Lap lap = new Lap(json.getLong(START), (RunContext) context);
 		lap.setDuration(json.getLong(DURATION));
 
 		return lap;
