@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.pvlf.android.timer"
-    android:versionCode="0013"
-    android:versionName="0.0.13">
+    android:versionCode="0014"
+    android:versionName="0.0.14">
 
     <uses-sdk
         android:minSdkVersion="8"
