@@ -5,6 +5,8 @@ package com.pvlf.android.timer.model;
  */
 public class Lap {
 
+	private final RunContext runContext;
+
 	/**
 	 * Start time in milliseconds.
 	 */
@@ -23,8 +25,10 @@ public class Lap {
 	/**
 	 * Creates new instance with a specific time.
 	 */
-	public Lap(long start) {
-		this.resetStart(start);
+	public Lap(long start, RunContext runContext) {
+		
+		this.start = start;
+		this.runContext = runContext;
 	}
 
 	public long getStart() {
@@ -94,7 +98,7 @@ public class Lap {
 		StringBuilder sb = new StringBuilder();
 		sb.append(getPosition()).append(": ");
 		sb.append(formatDuration(getDuration())).append(" - ");
-		//TODO: add sb.append(formatDurationAsMinutesAndSeconds((long) (getDuration() * lapsPerMile)));
+		sb.append(formatDurationAsMinutesAndSeconds((long) (getDuration() * runContext.getLapsPerUnitOfDistance())));
 
 		return sb.toString(); 
 	}

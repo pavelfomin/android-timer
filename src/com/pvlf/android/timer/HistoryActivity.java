@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.pvlf.android.timer.model.Run;
+import com.pvlf.android.timer.model.RunContext;
 import com.pvlf.android.timer.model.json.RunWrapper;
 import com.pvlf.android.timer.util.JSONStorageUtility;
 
@@ -44,6 +45,8 @@ public class HistoryActivity extends ListActivity {
 	 */
 	private ArrayAdapter<String> adapter;
 
+	private RunContext runContext;
+
 	/**
 	 * Called when the activity is starting.
 	 */
@@ -51,6 +54,9 @@ public class HistoryActivity extends ListActivity {
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		setContentView(R.layout.history);
+		
+		Intent intent = getIntent();
+		runContext = (RunContext) intent.getSerializableExtra(TimerActivity.RUN_CONTEXT_PARAMETER);
 		
 		ListView listView = (ListView) findViewById(android.R.id.list);
 		//enable long click event for list items
@@ -71,7 +77,7 @@ public class HistoryActivity extends ListActivity {
     	List<String> items = new ArrayList<String>();
     	List<Run> list;
 		try {
-			list = JSONStorageUtility.getList(this, new RunWrapper(), HISTORY_FILE_NAME, HISTORY);
+			list = JSONStorageUtility.getList(this, new RunWrapper(), HISTORY_FILE_NAME, HISTORY, runContext);
 	    	for (Run run : list) {
 	    		items.add(run.getDescription());
 			}

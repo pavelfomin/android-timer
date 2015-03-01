@@ -9,11 +9,18 @@ import java.util.List;
  */
 public class Run {
 
+	private final RunContext runContext;
 	private final List<Lap> laps;
 	private boolean completed;
 
-	public Run() {
+	public Run(RunContext runContext) {
+		
 		this.laps = new ArrayList<Lap>();
+		this.runContext = runContext;
+	}
+
+	public RunContext getRunContext() {
+		return runContext;
 	}
 
 	public List<Lap> getLaps() {

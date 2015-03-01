@@ -2,6 +2,7 @@ package com.pvlf.android.timer.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,10 +27,11 @@ public abstract class JSONStorageUtility {
      * @param jsonSerializable instance of JSONSerializable
      * @param fileName file name
      * @param jsonElement top json element
+     * @param serializableContext serializable context 
      * @return list of entities
      * @throws Exception 
      */
-	public static <T> List<T> getList(Context context, JSONSerializable<T> jsonSerializable, String fileName, String jsonElement) throws Exception {
+	public static <T> List<T> getList(Context context, JSONSerializable<T> jsonSerializable, String fileName, String jsonElement, Serializable serializableContext) throws Exception {
 
 		List<T> entities = new ArrayList<T>();
 		File file = new File(context.getFilesDir(), fileName);
@@ -38,7 +40,7 @@ public abstract class JSONStorageUtility {
 			JSONObject json = new JSONObject(data);
 			JSONArray array = json.getJSONArray(jsonElement);
 			for (int i = 0; i < array.length(); i++) {
-				T enity = jsonSerializable.fromJSON(array.getJSONObject(i));
+				T enity = jsonSerializable.fromJSON(array.getJSONObject(i), serializableContext);
 				entities.add(enity);
 			}
 		} catch (FileNotFoundException e) {
