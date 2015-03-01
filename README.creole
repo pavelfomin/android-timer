@@ -1,0 +1,7 @@
+=Android Timer=
+**Android Timer** is a run timer application for //Android// with the following features:
+* Shows run duration, current lap duration, number of laps completed and distance covered
+* Laps counter with lap duration and speed per lap
+* Ability to remove any lap with its duration transfered to the next lap
+* Run history with ability to resume any run saved
+* Configurable number of laps per unit of distance e.g. mile, kilometer, etc
