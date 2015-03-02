@@ -5,3 +5,5 @@
 * Ability to remove any lap with its duration transfered to the next lap
 * Run history with ability to resume any run saved
 * Configurable number of laps per unit of distance e.g. mile, kilometer, etc
+
+{{https://github.com/pavelfomin/android-timer/blob/master/docs/screenshot.png}}
