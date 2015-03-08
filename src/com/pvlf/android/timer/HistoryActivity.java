@@ -124,8 +124,6 @@ public class HistoryActivity extends ListActivity {
 							Log.e(TAG, e.getMessage(), e);
 							Toast.makeText(HistoryActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
 						}
-						// notify adapter of the changes made to force the data refresh
-						adapter.notifyDataSetChanged();
 					}
 				});
 	}
@@ -153,9 +151,6 @@ public class HistoryActivity extends ListActivity {
 								Log.e(TAG, e.getMessage(), e);
 								Toast.makeText(HistoryActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
 							}
-							// notify adapter of the changes made to force the
-							// data refresh
-							adapter.notifyDataSetChanged();
 						}
 					});
 			return true;

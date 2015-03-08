@@ -235,9 +235,6 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 
 		//insert new lap at the beginning of the list
 		adapter.insert(lap, 0);
-
-		//notify adapter of the changes made to force the data refresh
-		adapter.notifyDataSetChanged();
 	}
 
     /**
@@ -287,9 +284,6 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 				public void onClick(DialogInterface dialog, int choice) {
 					// remove all items from adapter
 					adapter.clear();
-					// notify adapter of the changes made to force the data
-					// refresh
-					adapter.notifyDataSetChanged();
 					// reset run
 					run = null;
 					// set initial values
@@ -463,9 +457,6 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 					if (run.removeLap(lap)) {
 						// remove selected lap from adapter
 						adapter.remove(lap);
-						
-						// notify adapter of the changes made to force the data refresh
-						adapter.notifyDataSetChanged();
 						
 						//update Timer View if run is complete
 						if (run.isCompleted()) {
