@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -200,6 +201,9 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 		} else if(! run.isCompleted()) {
 			//end current lap
 			endLap(currentTimeMillis);
+		} else {
+			//resume run
+			run.setSaved(false);
 		}
 
 		//start new lap
@@ -278,11 +282,12 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 		if (run != null && run.isCompleted()) {
 			
 			AlertDialog.Builder adb = new AlertDialog.Builder(this);
-			adb.setTitle(R.string.resetTimer);
-			adb.setMessage(getString(R.string.msg_resetTimer));
+			adb.setTitle(R.string.msg_resetTimer);
 			adb.setNegativeButton(getString(R.string.cancel), null);
 			adb.setPositiveButton(getString(R.string.ok), new AlertDialog.OnClickListener() {
+
 				public void onClick(DialogInterface dialog, int choice) {
+				
 					//remove all items from adapter
 					adapter.clear();
 					//notify adapter of the changes made to force the data refresh
@@ -334,6 +339,7 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 			try {
 				JSONStorageUtility.add(this, run, new RunWrapper(), HistoryActivity.HISTORY_FILE_NAME, HistoryActivity.HISTORY);
 				Toast.makeText(this, getString(R.string.msg_runSaved), Toast.LENGTH_SHORT).show();
+				run.setSaved(true);
 			} catch (Exception e) {
 				Log.e(TAG, e.getMessage(), e);
 				Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -417,6 +423,33 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 
     }
 
+    /**
+     * Confirm exit if the current run is not saved.
+     */
+    @Override
+	public void onBackPressed() {
+
+		//check if run is saved.
+    	if (run == null || run.isSaved()) {
+    		super.onBackPressed();
+    		return;
+		}
+
+    	//if not saved then ask for a confirmation
+		Builder adb = new AlertDialog.Builder(this);
+		adb.setTitle(getString(R.string.msg_confirmExit));
+		adb.setCancelable(false);
+		adb.setNegativeButton(getString(R.string.cancel), null);
+		adb.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int id) {
+
+				TimerActivity.super.onBackPressed();
+			}
+		});
+		adb.show();
+	}
+    
 	/**
 	 * Laps Long Click Listener that processes the long click event. 
 	 *
@@ -427,8 +460,7 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 		public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 			
 			AlertDialog.Builder adb = new AlertDialog.Builder(TimerActivity.this);
-	        adb.setTitle(R.string.removeLapsEntry);
-	        adb.setMessage(getString(R.string.removeLapsEntry));
+	        adb.setTitle(R.string.msg_removeLapsEntry);
 	        adb.setNegativeButton(getString(R.string.cancel), null);
 	        adb.setPositiveButton(getString(R.string.ok), new AlertDialog.OnClickListener() {
 	                

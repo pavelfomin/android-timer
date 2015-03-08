@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:onClick="removeAll"
         android:drawableLeft="@android:drawable/ic_menu_delete"
-        android:text="@string/removeAllHistoryEntries" />
+        android:text="@string/removeAll" />
     
     <ListView
         android:id="@android:id/list"

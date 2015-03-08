@@ -58,6 +58,8 @@ public class RunWrapper implements JSONSerializable<Run> {
 			run.getLaps().add(lap);
 		}
 		
+		run.setSaved(true);
+		
 		return run;
 	}
 

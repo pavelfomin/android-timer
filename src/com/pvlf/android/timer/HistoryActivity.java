@@ -111,8 +111,7 @@ public class HistoryActivity extends ListActivity {
 	 */
 	public void removeAll(View button) {
 		AlertDialog.Builder adb = new AlertDialog.Builder(this);
-        adb.setTitle(R.string.removeAllHistoryEntries);
-        adb.setMessage(getString(R.string.removeAllHistoryEntries));
+        adb.setTitle(R.string.msg_removeAllHistoryEntries);
         adb.setNegativeButton(getString(R.string.cancel), null);
         adb.setPositiveButton(getString(R.string.ok), new AlertDialog.OnClickListener() {
                 public void onClick(DialogInterface dialog, int choice) {
@@ -141,8 +140,7 @@ public class HistoryActivity extends ListActivity {
 		@Override
 		public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 			AlertDialog.Builder adb = new AlertDialog.Builder(HistoryActivity.this);
-	        adb.setTitle(R.string.removeHistoryEntry);
-	        adb.setMessage(getString(R.string.removeHistoryEntry));
+	        adb.setTitle(R.string.msg_removeHistoryEntry);
 	        adb.setNegativeButton(getString(R.string.cancel), null);
 	        adb.setPositiveButton(getString(R.string.ok), new AlertDialog.OnClickListener() {
 	                public void onClick(DialogInterface dialog, int choice) {

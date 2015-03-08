@@ -7,16 +7,13 @@
     <string name="reset">Reset</string>
     <string name="statistic">Statistic</string>
     <string name="save">Save</string>
+    <string name="removeAll">Remove all</string>
 
     <!-- options -->
     <string name="settings">Settings</string>
     <string name="history">History</string>
 
     <!-- dialog messages -->
-    <string name="resetTimer">Reset Timer</string>
-    <string name="removeAllHistoryEntries">Remove All History Entries</string>
-    <string name="removeHistoryEntry">Remove History Entry</string>
-    <string name="removeLapsEntry">Remove Lap</string>
 
     <!-- dialog buttons -->
     <string name="ok">OK</string>
@@ -27,7 +24,12 @@
     <string name="lapsPerUnitOfDistanceTitle">Laps Per Unit Of Distance</string>
     
     <!-- messages -->
-    <string name="msg_resetTimer">Reset timer data</string>
+    <string name="msg_resetTimer">Reset timer?</string>
+    <string name="msg_removeHistoryEntry">Remove selected history entry?</string>
+    <string name="msg_removeLapsEntry">Remove selected lap?</string>
+    <string name="msg_confirmExit">Current run is not saved. Exit anyway?</string>
+    
+    <string name="msg_removeAllHistoryEntries">Remove all history entries?</string>
     <string name="msg_timerNotActive">Timer is not active</string>
     <string name="msg_runSaved">Current run is saved</string>
     <string name="msg_runNotComplete">Current run is not complete</string>

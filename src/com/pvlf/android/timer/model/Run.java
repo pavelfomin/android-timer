@@ -15,7 +15,8 @@ public class Run implements Serializable {
 
 	private final RunContext runContext;
 	private final List<Lap> laps;
-
+	private boolean saved;
+	
 	public Run(RunContext runContext) {
 		
 		this.laps = new ArrayList<Lap>();
@@ -163,6 +164,14 @@ public class Run implements Serializable {
 		return statistic;
 	}
 	
+	public boolean isSaved() {
+		return saved;
+	}
+
+	public void setSaved(boolean saved) {
+		this.saved = saved;
+	}
+
 	@Override
 	public String toString() {
 		return getDescription();
