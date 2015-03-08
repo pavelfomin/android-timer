@@ -21,7 +21,7 @@ public abstract class AlertDialogUtility {
 	public static AlertDialog showAlertDialog(Context context, int messageId, OnClickListener positiveAction) {
 		
 		AlertDialog.Builder adb = new AlertDialog.Builder(context);
-        adb.setTitle(R.string.msg_removeAllHistoryEntries);
+        adb.setTitle(messageId);
         adb.setNegativeButton(context.getString(R.string.cancel), null);
         adb.setPositiveButton(context.getString(R.string.ok), positiveAction);
 		

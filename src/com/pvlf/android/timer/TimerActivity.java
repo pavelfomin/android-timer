@@ -443,32 +443,29 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 		@Override
 		public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 			
-			AlertDialog.Builder adb = new AlertDialog.Builder(TimerActivity.this);
-	        adb.setTitle(R.string.msg_removeLapsEntry);
-	        adb.setNegativeButton(getString(R.string.cancel), null);
-	        adb.setPositiveButton(getString(R.string.ok), new AlertDialog.OnClickListener() {
-	                
-				public void onClick(DialogInterface dialog, int choice) {
+			AlertDialogUtility.showAlertDialog(TimerActivity.this, R.string.msg_removeLapsEntry,
+					new AlertDialog.OnClickListener() {
 
-					// obtain selected lap from adapter
-					Lap lap = adapter.getItem(position);
+						public void onClick(DialogInterface dialog, int choice) {
 
-					// remove selected lap from the run
-					if (run.removeLap(lap)) {
-						// remove selected lap from adapter
-						adapter.remove(lap);
-						
-						//update Timer View if run is complete
-						if (run.isCompleted()) {
-							updateTimerView();
+							// obtain selected lap from adapter
+							Lap lap = adapter.getItem(position);
+
+							// remove selected lap from the run
+							if (run.removeLap(lap)) {
+								// remove selected lap from adapter
+								adapter.remove(lap);
+
+								// update Timer View if run is complete
+								if (run.isCompleted()) {
+									updateTimerView();
+								}
+							} else {
+								Log.e(TAG, "Lap wasn't removed at position=" + position);
+
+							}
 						}
-					} else {
-						Log.e(TAG, "Lap wasn't removed at position=" + position);
-						
-					}
-				}
-	        });
-	        adb.show();
+					});
 			return true;
 		}
 	}
