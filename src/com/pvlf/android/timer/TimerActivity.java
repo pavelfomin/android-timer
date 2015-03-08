@@ -1,6 +1,5 @@
 package com.pvlf.android.timer;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +32,7 @@ import com.pvlf.android.timer.model.RunContext;
 import com.pvlf.android.timer.model.Statistic;
 import com.pvlf.android.timer.model.json.RunWrapper;
 import com.pvlf.android.timer.util.AlertDialogUtility;
+import com.pvlf.android.timer.util.FormatUtility;
 import com.pvlf.android.timer.util.JSONStorageUtility;
 
 /**
@@ -285,12 +285,11 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 
 	private void updateTimerViewValues(long lapDuration, long runDuration, int numberOfLaps) {
 
-		textRunDuration.setText(Lap.formatDuration(runDuration));
-		textLapDuration.setText(Lap.formatDuration(lapDuration));
+		textRunDuration.setText(FormatUtility.formatDuration(runDuration));
+		textLapDuration.setText(FormatUtility.formatDuration(lapDuration));
 		textLaps.setText(String.valueOf(numberOfLaps));
 		
-		DecimalFormat decimalFormat = new DecimalFormat("0.00");
-		textDistance.setText(decimalFormat.format(numberOfLaps / runContext.getLapsPerUnitOfDistance()));
+		textDistance.setText(FormatUtility.formatDistance(numberOfLaps / runContext.getLapsPerUnitOfDistance()));
 	}
 
 	/**
@@ -365,16 +364,16 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("Time per lap\n");
-		sb.append("Min: ").append(Lap.formatDuration(statistic.getMinimum()));
-		sb.append(" Max: ").append(Lap.formatDuration(statistic.getMaximum()));
-		sb.append(" Aver: ").append(Lap.formatDuration(statistic.getAverage()));
+		sb.append("Min: ").append(FormatUtility.formatDuration(statistic.getMinimum()));
+		sb.append(" Max: ").append(FormatUtility.formatDuration(statistic.getMaximum()));
+		sb.append(" Aver: ").append(FormatUtility.formatDuration(statistic.getAverage()));
 		
 		float lapsPerUnitOfDistance = runContext.getLapsPerUnitOfDistance();
 
 		sb.append("\nTime per mile\n");
-		sb.append("Min: ").append(Lap.formatDurationAsMinutesAndSeconds((long) (statistic.getMinimum() * lapsPerUnitOfDistance)));
-		sb.append(" Max: ").append(Lap.formatDurationAsMinutesAndSeconds((long) (statistic.getMaximum() * lapsPerUnitOfDistance)));
-		sb.append(" Aver: ").append(Lap.formatDurationAsMinutesAndSeconds((long) (statistic.getAverage() * lapsPerUnitOfDistance)));
+		sb.append("Min: ").append(FormatUtility.formatDurationAsMinutesAndSeconds((long) (statistic.getMinimum() * lapsPerUnitOfDistance)));
+		sb.append(" Max: ").append(FormatUtility.formatDurationAsMinutesAndSeconds((long) (statistic.getMaximum() * lapsPerUnitOfDistance)));
+		sb.append(" Aver: ").append(FormatUtility.formatDurationAsMinutesAndSeconds((long) (statistic.getAverage() * lapsPerUnitOfDistance)));
 		
 		return sb.toString();
 	}

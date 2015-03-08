@@ -2,6 +2,8 @@ package com.pvlf.android.timer.model;
 
 import java.io.Serializable;
 
+import com.pvlf.android.timer.util.FormatUtility;
+
 /**
  * Holds the data for a lap.
  */
@@ -96,43 +98,13 @@ public class Lap implements Serializable {
 		return getDuration() > 0;
 	}
 
-	/**
-	 * Returns formatted duration as h:m:ss:hs.
-	 * @param millis
-	 * @return formatted duration.
-	 */
-	public static String formatDuration(long millis) {
-
-        int seconds = (int) (millis / 1000);
-        int minutes = seconds / 60;
-        seconds = seconds % 60;
-        int hours = minutes / 60;
-        minutes = minutes % 60;
-
-        return String.format("%d:%02d:%02d:%1d", hours, minutes, seconds, (millis % 1000) / 100);
-    }
-	
-	/**
-	 * Returns formatted duration as m:ss.
-	 * @param millis
-	 * @return formatted duration.
-	 */
-	public static String formatDurationAsMinutesAndSeconds(long millis) {
-		
-		int seconds = (int) (millis / 1000);
-		int minutes = seconds / 60;
-		seconds = seconds % 60;
-		
-		return String.format("%d:%02d", minutes, seconds);
-	}
-	
 	@Override
 	public String toString() {
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(getPosition()).append(": ");
-		sb.append(formatDuration(getDuration())).append(" - ");
-		sb.append(formatDurationAsMinutesAndSeconds((long) (getDuration() * runContext.getLapsPerUnitOfDistance())));
+		sb.append(FormatUtility.formatDuration(getDuration())).append(" - ");
+		sb.append(FormatUtility.formatDurationAsMinutesAndSeconds((long) (getDuration() * runContext.getLapsPerUnitOfDistance())));
 
 		return sb.toString(); 
 	}

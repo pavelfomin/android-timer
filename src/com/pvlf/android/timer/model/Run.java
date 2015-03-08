@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.pvlf.android.timer.util.FormatUtility;
+
 /**
  * Holds the data for a run.
  */
@@ -121,12 +123,12 @@ public class Run implements Serializable {
 		} else {
 			Statistic statistic = getRunStatistic();
 			sb.append(format.format(new Date(lap.getStart())));
-			sb.append(" - ").append(Lap.formatDurationAsMinutesAndSeconds(getDuration()));
+			sb.append(" - ").append(FormatUtility.formatDurationAsMinutesAndSeconds(getDuration()));
 			if (statistic != null) {
 				sb.append(" (");
-				sb.append(statistic.getDistance());
+				sb.append(FormatUtility.formatDistance(statistic.getDistance()));
 				sb.append(" / ");
-				sb.append(Lap.formatDurationAsMinutesAndSeconds((long) statistic.getAverageSpeed()));
+				sb.append(FormatUtility.formatDurationAsMinutesAndSeconds((long) statistic.getAverageSpeed()));
 				sb.append(")");
 			}
 		}
