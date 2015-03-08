@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -50,8 +51,9 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 	private TextView textDistance;
     
 	private RunContext runContext;
-
     private Run run;
+
+	private AudioManager audioManager;
 
 	/**
 	 * List data adapter.
@@ -147,6 +149,8 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 
         //set initial values
         updateTimerViewValues(0, 0, 0);
+
+        audioManager = (AudioManager)getSystemService(AUDIO_SERVICE);
     }
 
 	@Override
@@ -163,17 +167,29 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 			if (action == KeyEvent.ACTION_DOWN) {
                 endRun(currentTimeMillis);
 			}
+			
+			playSound();
 			return true;
 		
 		case KeyEvent.KEYCODE_VOLUME_DOWN:
 			if (action == KeyEvent.ACTION_DOWN) {
 				startLap(currentTimeMillis);
 			}
+
+			playSound();
 			return true;
 
 		default:
 			return super.dispatchKeyEvent(event);
 		}
+	}
+
+	/**
+	 * Plays the sound.
+	 */
+	private void playSound() {
+		
+		audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_STANDARD, 2);
 	}
 
 	/**
