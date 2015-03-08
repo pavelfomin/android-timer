@@ -119,8 +119,16 @@ public class Run implements Serializable {
 		if (lap == null) {
 			sb.append("Empty run");
 		} else {
+			Statistic statistic = getRunStatistic();
 			sb.append(format.format(new Date(lap.getStart())));
-			sb.append(" - ").append(Lap.formatDuration(getDuration()));
+			sb.append(" - ").append(Lap.formatDurationAsMinutesAndSeconds(getDuration()));
+			if (statistic != null) {
+				sb.append(" (");
+				sb.append(statistic.getDistance());
+				sb.append(" / ");
+				sb.append(Lap.formatDurationAsMinutesAndSeconds((long) statistic.getAverageSpeed()));
+				sb.append(")");
+			}
 		}
 		return sb.toString();
 	}
@@ -137,31 +145,7 @@ public class Run implements Serializable {
 	 */
 	public Statistic getRunStatistic() {
 		
-		long minimum = Long.MAX_VALUE;
-		long maximum = Long.MIN_VALUE;
-		long totalDuration = 0;
-		int totalCompleted = 0;
-		
-		for (Lap lap : getLaps()) {
-			if (lap.isCompleted()) {
-				long duration = lap.getDuration();
-				if (duration > maximum) {
-					maximum = duration;
-				}
-				if (duration < minimum) {
-					minimum = duration;
-				}
-				totalDuration += duration;
-				totalCompleted++;
-			}
-		}
-
-		Statistic statistic = null;
-		if (totalCompleted > 0) {
-			statistic = new Statistic(minimum, maximum, totalDuration / totalCompleted);
-		}
-		
-		return statistic;
+		return Statistic.createStatistic(this);
 	}
 	
 	public boolean isSaved() {
