@@ -14,16 +14,30 @@ public abstract class AlertDialogUtility {
 	/**
 	 * Shows the alert dialog.
 	 * @param context context
-	 * @param messageId message id
+	 * @param titleId title id
 	 * @param positiveAction positive action
 	 * @return alert dialog instance
 	 */
-	public static AlertDialog showAlertDialog(Context context, int messageId, OnClickListener positiveAction) {
+	public static AlertDialog showAlertDialog(Context context, int titleId, OnClickListener positiveAction) {
+		
+		return showAlertDialog(context, titleId, null, positiveAction);
+	}
+
+	/**
+	 * Shows the alert dialog.
+	 * @param context context
+	 * @param titleId title id
+	 * @param message message
+	 * @param positiveAction positive action
+	 * @return alert dialog instance
+	 */
+	public static AlertDialog showAlertDialog(Context context, int titleId, String message, OnClickListener positiveAction) {
 		
 		AlertDialog.Builder adb = new AlertDialog.Builder(context);
-        adb.setTitle(messageId);
-        adb.setNegativeButton(context.getString(R.string.cancel), null);
-        adb.setPositiveButton(context.getString(R.string.ok), positiveAction);
+		adb.setTitle(titleId);
+		adb.setMessage(message);
+		//adb.setNegativeButton(context.getString(R.string.cancel), null);
+		adb.setPositiveButton(context.getString(R.string.ok), positiveAction);
 		
 		return adb.show();
 		

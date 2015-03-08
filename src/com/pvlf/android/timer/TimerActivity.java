@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -328,7 +327,7 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 			
 			if (statistic != null) {
 				String message = formatStatistic(statistic);
-				AlertDialogUtility.showAlertDialog(this, R.string.statistic, null); 
+				AlertDialogUtility.showAlertDialog(this, R.string.statistic, message, null); 
 				Log.d(TAG, "Run statistic: "+ message);
 			}
 		}
@@ -431,25 +430,20 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
     @Override
 	public void onBackPressed() {
 
-		//check if run is saved.
+		//check if run is saved
     	if (run == null || run.isSaved()) {
     		super.onBackPressed();
     		return;
 		}
 
     	//if not saved then ask for a confirmation
-		Builder adb = new AlertDialog.Builder(this);
-		adb.setTitle(getString(R.string.msg_confirmExit));
-		adb.setCancelable(false);
-		adb.setNegativeButton(getString(R.string.cancel), null);
-		adb.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+		AlertDialogUtility.showAlertDialog(this, R.string.msg_confirmExit, new DialogInterface.OnClickListener() {
 
 			public void onClick(DialogInterface dialog, int id) {
 
 				TimerActivity.super.onBackPressed();
 			}
 		});
-		adb.show();
 	}
     
 	/**
