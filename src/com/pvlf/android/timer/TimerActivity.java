@@ -99,6 +99,12 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 			}
 			
 			updateTimerView();
+
+			//get default shared preferences 
+			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+			//reset run context with the current settings
+			run.getRunContext().reset(sharedPreferences);
 		}
 	}
 
@@ -255,7 +261,7 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 			runDuration += lapDuration;
 			numberOfLaps--;
 			//post another update
-			timerHandler.postDelayed(timerRunnable, 100);
+			timerHandler.postDelayed(timerRunnable, 1000 / runContext.getRefreshRate());
 		}
 		
 		updateTimerViewValues(lapDuration, runDuration, numberOfLaps);
@@ -267,7 +273,7 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 		textLapDuration.setText(Lap.formatDuration(lapDuration));
 		textLaps.setText(String.valueOf(numberOfLaps));
 		
-		DecimalFormat decimalFormat = new DecimalFormat("0.00"); 
+		DecimalFormat decimalFormat = new DecimalFormat("0.00");
 		textDistance.setText(decimalFormat.format(numberOfLaps / runContext.getLapsPerUnitOfDistance()));
 	}
 
@@ -400,11 +406,8 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 
     	Log.v(TAG, "changed setting key="+ key +" values="+ sharedPreferences.getAll());
     	
-        if (RunContext.LAPS_PER_UNIT_OF_DISTANCE_KEY.equals(key)) {
-    		//re-initialize run context with configured preferences
-    		runContext.reset(sharedPreferences);
-        }
-
+		//re-initialize run context with configured preferences
+		runContext.reset(sharedPreferences);
     }
 
     /**

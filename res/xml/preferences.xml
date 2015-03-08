@@ -9,4 +9,12 @@
         android:summary="@string/lapsPerUnitOfDistanceSummary"
         android:title="@string/lapsPerUnitOfDistanceTitle" />
     
+    <EditTextPreference
+        android:key="refreshRate"
+        android:singleLine="true"
+        android:defaultValue="10"
+        android:numeric="integer"
+        android:summary="@string/refreshRateSummary"
+        android:title="@string/refreshRateTitle" />
+    
 </PreferenceScreen>

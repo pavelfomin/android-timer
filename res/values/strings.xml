@@ -22,6 +22,8 @@
     <!-- Settings -->
     <string name="lapsPerUnitOfDistanceSummary">Specify the number of laps per unit of distance e.g. mile, kilometer, etc</string>
     <string name="lapsPerUnitOfDistanceTitle">Laps Per Unit Of Distance</string>
+    <string name="refreshRateSummary">Specify the number of times per second the timer view is refreshed. Use lower number to conserve the battery.</string>
+    <string name="refreshRateTitle">Refresh Rate</string>
     
     <!-- messages -->
     <string name="msg_resetTimer">Reset timer?</string>
