@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.pvlf.android.timer.model.Run;
 import com.pvlf.android.timer.model.RunContext;
 import com.pvlf.android.timer.model.json.RunWrapper;
+import com.pvlf.android.timer.util.AlertDialogUtility;
 import com.pvlf.android.timer.util.JSONStorageUtility;
 
 /**
@@ -110,25 +111,23 @@ public class HistoryActivity extends ListActivity {
 	 * @param button
 	 */
 	public void removeAll(View button) {
-		AlertDialog.Builder adb = new AlertDialog.Builder(this);
-        adb.setTitle(R.string.msg_removeAllHistoryEntries);
-        adb.setNegativeButton(getString(R.string.cancel), null);
-        adb.setPositiveButton(getString(R.string.ok), new AlertDialog.OnClickListener() {
-                public void onClick(DialogInterface dialog, int choice) {
-                	//remove all items from adapter
-                	adapter.clear();
-                	//remove all items from from storage
-                	try {
-						JSONStorageUtility.removeAllEntities(HistoryActivity.this, HISTORY_FILE_NAME);
-					} catch (Exception e) {
-						Log.e(TAG, e.getMessage(), e);
-						Toast.makeText(HistoryActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+		
+		AlertDialogUtility.showAlertDialog(this, R.string.msg_removeAllHistoryEntries,
+				new AlertDialog.OnClickListener() {
+					public void onClick(DialogInterface dialog, int choice) {
+						// remove all items from adapter
+						adapter.clear();
+						// remove all items from from storage
+						try {
+							JSONStorageUtility.removeAllEntities(HistoryActivity.this, HISTORY_FILE_NAME);
+						} catch (Exception e) {
+							Log.e(TAG, e.getMessage(), e);
+							Toast.makeText(HistoryActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+						}
+						// notify adapter of the changes made to force the data refresh
+						adapter.notifyDataSetChanged();
 					}
-                	//notify adapter of the changes made to force the data refresh
-                    adapter.notifyDataSetChanged();
-                }
-        });
-        adb.show();
+				});
 	}
 
 	/**
@@ -139,27 +138,26 @@ public class HistoryActivity extends ListActivity {
 
 		@Override
 		public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-			AlertDialog.Builder adb = new AlertDialog.Builder(HistoryActivity.this);
-	        adb.setTitle(R.string.msg_removeHistoryEntry);
-	        adb.setNegativeButton(getString(R.string.cancel), null);
-	        adb.setPositiveButton(getString(R.string.ok), new AlertDialog.OnClickListener() {
-	                public void onClick(DialogInterface dialog, int choice) {
-	                	//obtain selected run from adapter
-	                	Run run = adapter.getItem(position);
-	                	//remove selected run from adapter
-	                	adapter.remove(run);
-						//remove selected run from storage
-						try {
-							JSONStorageUtility.remove(HistoryActivity.this, position, HISTORY_FILE_NAME, HISTORY);
-						} catch (Exception e) {
-							Log.e(TAG, e.getMessage(), e);
-							Toast.makeText(HistoryActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+			
+			AlertDialogUtility.showAlertDialog(HistoryActivity.this, R.string.msg_removeHistoryEntry,
+					new AlertDialog.OnClickListener() {
+						public void onClick(DialogInterface dialog, int choice) {
+							// obtain selected run from adapter
+							Run run = adapter.getItem(position);
+							// remove selected run from adapter
+							adapter.remove(run);
+							// remove selected run from storage
+							try {
+								JSONStorageUtility.remove(HistoryActivity.this, position, HISTORY_FILE_NAME, HISTORY);
+							} catch (Exception e) {
+								Log.e(TAG, e.getMessage(), e);
+								Toast.makeText(HistoryActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+							}
+							// notify adapter of the changes made to force the
+							// data refresh
+							adapter.notifyDataSetChanged();
 						}
-						//notify adapter of the changes made to force the data refresh
-	                    adapter.notifyDataSetChanged();
-	                }
-	        });
-	        adb.show();
+					});
 			return true;
 		}
 	}

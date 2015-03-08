@@ -31,6 +31,7 @@ import com.pvlf.android.timer.model.Run;
 import com.pvlf.android.timer.model.RunContext;
 import com.pvlf.android.timer.model.Statistic;
 import com.pvlf.android.timer.model.json.RunWrapper;
+import com.pvlf.android.timer.util.AlertDialogUtility;
 import com.pvlf.android.timer.util.JSONStorageUtility;
 
 /**
@@ -281,24 +282,20 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 		
 		if (run != null && run.isCompleted()) {
 			
-			AlertDialog.Builder adb = new AlertDialog.Builder(this);
-			adb.setTitle(R.string.msg_resetTimer);
-			adb.setNegativeButton(getString(R.string.cancel), null);
-			adb.setPositiveButton(getString(R.string.ok), new AlertDialog.OnClickListener() {
+			AlertDialogUtility.showAlertDialog(this, R.string.msg_resetTimer, new AlertDialog.OnClickListener() {
 
 				public void onClick(DialogInterface dialog, int choice) {
-				
-					//remove all items from adapter
+					// remove all items from adapter
 					adapter.clear();
-					//notify adapter of the changes made to force the data refresh
+					// notify adapter of the changes made to force the data
+					// refresh
 					adapter.notifyDataSetChanged();
-					//reset run
+					// reset run
 					run = null;
-					//set initial values
+					// set initial values
 					updateTimerViewValues(0, 0, 0);
 				}
 			});
-			adb.show();
 		} else {
 			Toast.makeText(this, getString(R.string.msg_runNotComplete), Toast.LENGTH_SHORT).show();
 		}
@@ -316,16 +313,9 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 			
 			if (statistic != null) {
 				String message = formatStatistic(statistic);
-				
-				AlertDialog.Builder adb = new AlertDialog.Builder(this);
-				adb.setTitle(R.string.statistic);
-				adb.setMessage(message);
-				adb.setPositiveButton(getString(R.string.ok), null);
-				adb.show();
-				
+				AlertDialogUtility.showAlertDialog(this, R.string.statistic, null); 
 				Log.d(TAG, "Run statistic: "+ message);
 			}
-			
 		}
 	}
 
