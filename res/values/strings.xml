@@ -8,6 +8,9 @@
     <string name="statistic">Statistic</string>
     <string name="save">Save</string>
     <string name="removeAll">Remove all</string>
+	
+	<!-- labels -->
+    <string name="labelRunDuration">Duration</string>
 
     <!-- options -->
     <string name="settings">Settings</string>

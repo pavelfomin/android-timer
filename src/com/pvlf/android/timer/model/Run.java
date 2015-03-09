@@ -1,8 +1,6 @@
 package com.pvlf.android.timer.model;
 
-import android.annotation.SuppressLint;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -86,6 +84,16 @@ public class Run implements Serializable {
 	}
 
 	/**
+	 * Returns current lap.
+	 * @return current lap.
+	 */
+	public Lap getFirstLap() {
+		
+		int lapsNumber = getLapsNumber();
+		return (lapsNumber == 0 ? null : getLaps().get(lapsNumber - 1));
+	}
+	
+	/**
 	 * Ends current lap.
 	 * @param currentTimeMillis
 	 * @return current lap
@@ -110,20 +118,32 @@ public class Run implements Serializable {
 
 		return duration;
 	}
+
+	public String getDurationFormatted() {
+		return FormatUtility.formatDurationAsMinutesAndSeconds(getDuration());
+	}
 	
-	@SuppressLint("SimpleDateFormat")
+	public Date getDate() {
+		
+		Lap lap = getFirstLap();
+		return (lap == null ? null : new Date(lap.getStart()));
+	}
+
+	public String getDateFormatted() {
+		
+		Date date = getDate();
+		return (date == null ? "" : FormatUtility.formatDate(date));
+	}
+	
 	public String getDescription() {
 		
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		Lap lap = (getLaps().isEmpty() ? null: getLaps().get(getLaps().size() - 1));
-		
 		StringBuilder sb = new StringBuilder();
-		if (lap == null) {
+		if (getLapsNumber() == 0) {
 			sb.append("Empty run");
 		} else {
 			Statistic statistic = getRunStatistic();
-			sb.append(format.format(new Date(lap.getStart())));
-			sb.append(" - ").append(FormatUtility.formatDurationAsMinutesAndSeconds(getDuration()));
+			sb.append(getDateFormatted());
+			sb.append(" - ").append(getDurationFormatted());
 			if (statistic != null) {
 				sb.append(" (");
 				sb.append(FormatUtility.formatDistance(statistic.getDistance()));
@@ -134,7 +154,7 @@ public class Run implements Serializable {
 		}
 		return sb.toString();
 	}
-	
+
 	public boolean isCompleted() {
 		
 		Lap lap = getCurrentLap();

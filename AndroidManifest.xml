@@ -47,6 +47,10 @@
             android:name="com.pvlf.android.timer.HistoryActivity"
             android:label="@string/history" />
         
+        <activity
+            android:name="com.pvlf.android.timer.StatisticActivity"
+            android:label="@string/statistic" />
+        
     </application>
 
 </manifest>

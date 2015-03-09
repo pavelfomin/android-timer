@@ -1,6 +1,10 @@
 package com.pvlf.android.timer.util;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import android.annotation.SuppressLint;
 
 /**
  * Format utility.
@@ -46,6 +50,19 @@ public abstract class FormatUtility {
 		seconds = seconds % 60;
 		
 		return String.format("%d:%02d", minutes, seconds);
+	}
+	
+	/**
+	 * Formats date.
+	 * @param date
+	 * @return formatted date.
+	 */
+	@SuppressLint("SimpleDateFormat")
+	public static String formatDate(Date date) {
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		return format.format(date);
+
 	}
 
 }
