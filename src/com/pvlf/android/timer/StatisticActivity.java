@@ -75,15 +75,19 @@ public class StatisticActivity extends Activity {
 		
 		textLapSpeedSlowest = (TextView) findViewById(R.id.textLapSpeedSlowest);
 		textLapSpeedSlowest.setText(FormatUtility.formatDurationAsMinutesAndSeconds((long) statistic.getSlowestSpeed()));
-		
+	
+		//force widgets removal in PORTRAIT mode
+		onConfigurationChanged(getResources().getConfiguration());
 	}
 
+	/**
+	 * Removes widgets to free more space in the PORTRAIT mode and restores them in LANDSCAPE mode.
+ 	 */
 	@Override
 	public void onConfigurationChanged(Configuration configuration) {
 
 		int visibility = (configuration.orientation == Configuration.ORIENTATION_PORTRAIT ? View.GONE : View.VISIBLE);
 
-        //remove widgets to free more space in the PORTRAIT mode / restore them in LANDSCAPE mode
 		textLapTimeMinimum.setVisibility(visibility);
     	textLapTimeMaximum.setVisibility(visibility);
     	textLapSpeedFastest.setVisibility(visibility);
@@ -91,5 +95,4 @@ public class StatisticActivity extends Activity {
     	
     	super.onConfigurationChanged(configuration);
 	}
-	
 }
