@@ -10,8 +10,12 @@
     <string name="removeAll">Remove all</string>
 	
 	<!-- labels -->
+    <string name="labelRunDate">Date</string>
+    <string name="labelRunDistance">Distance</string>
     <string name="labelRunDuration">Duration</string>
-
+    <string name="labelTimePerLap">Time per lap</string>
+    <string name="labelSpeedPerLap">Speed per lap</string>
+    
     <!-- options -->
     <string name="settings">Settings</string>
     <string name="history">History</string>

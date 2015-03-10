@@ -11,6 +11,54 @@
 		android:orientation="horizontal">
 
 	    <TextView
+			android:id="@+id/labelRunDate"
+			style="@style/TimerTextNormal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+			android:text="@string/labelRunDate"
+		/>
+	    		
+		<TextView
+			android:id="@+id/textRunDate"
+			style="@style/TimerTextNormal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+		/>
+	    
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+	    <TextView
+			android:id="@+id/labelRunDistance"
+			style="@style/TimerTextNormal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+			android:text="@string/labelRunDistance"
+		/>
+	    		
+		<TextView
+			android:id="@+id/textRunDistance"
+			style="@style/TimerTextNormal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+		/>
+	    
+	</LinearLayout>
+	
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+	    <TextView
 			android:id="@+id/labelRunDuration"
 			style="@style/TimerTextNormal"
 			android:layout_width="wrap_content"
@@ -21,6 +69,86 @@
 	    		
 		<TextView
 			android:id="@+id/textRunDuration"
+			style="@style/TimerTextNormal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+		/>
+	    
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+	    <TextView
+			android:id="@+id/labelTimePerLap"
+			style="@style/TimerTextNormal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+			android:text="@string/labelTimePerLap"
+		/>
+	    		
+		<TextView
+			android:id="@+id/textLapTimeMinimum"
+			style="@style/TimerTextNormal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+		/>
+	    
+		<TextView
+			android:id="@+id/textLapTimeAverage"
+			style="@style/TimerTextNormal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+		/>
+	    
+		<TextView
+			android:id="@+id/textLapTimeMaximum"
+			style="@style/TimerTextNormal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+		/>
+	    
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+	    <TextView
+			android:id="@+id/labelSpeedPerLap"
+			style="@style/TimerTextNormal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+			android:text="@string/labelSpeedPerLap"
+		/>
+	    		
+		<TextView
+			android:id="@+id/textLapSpeedFastest"
+			style="@style/TimerTextNormal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+		/>
+	    
+		<TextView
+			android:id="@+id/textLapSpeedAverage"
+			style="@style/TimerTextNormal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+		/>
+	    
+		<TextView
+			android:id="@+id/textLapSpeedSlowest"
 			style="@style/TimerTextNormal"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
