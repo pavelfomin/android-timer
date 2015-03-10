@@ -2,8 +2,10 @@ package com.pvlf.android.timer;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.pvlf.android.timer.model.Run;
@@ -15,6 +17,11 @@ import com.pvlf.android.timer.util.FormatUtility;
  */
 public class StatisticActivity extends Activity {
 	private static final String TAG = StatisticActivity.class.toString();
+	
+	private TextView textLapSpeedSlowest;
+	private TextView textLapSpeedFastest;
+	private TextView textLapTimeMaximum;
+	private TextView textLapTimeMinimum;
 	
 	/**
 	 * Called when the activity is starting.
@@ -51,22 +58,38 @@ public class StatisticActivity extends Activity {
 		TextView textRunDuration = (TextView) findViewById(R.id.textRunDuration);
 		textRunDuration.setText(run.getDurationFormatted());
 		
-		TextView textLapTimeMinimum = (TextView) findViewById(R.id.textLapTimeMinimum);
+		textLapTimeMinimum = (TextView) findViewById(R.id.textLapTimeMinimum);
 		textLapTimeMinimum.setText(FormatUtility.formatDurationAsMinutesAndSeconds(statistic.getMinimum()));
 		
 		TextView textLapTimeAverage = (TextView) findViewById(R.id.textLapTimeAverage);
 		textLapTimeAverage.setText(FormatUtility.formatDurationAsMinutesAndSeconds(statistic.getAverage()));
 		
-		TextView textLapTimeMaximum = (TextView) findViewById(R.id.textLapTimeMaximum);
+		textLapTimeMaximum = (TextView) findViewById(R.id.textLapTimeMaximum);
 		textLapTimeMaximum.setText(FormatUtility.formatDurationAsMinutesAndSeconds(statistic.getMaximum()));
 
-		TextView textLapSpeedFastest = (TextView) findViewById(R.id.textLapSpeedFastest);
+		textLapSpeedFastest = (TextView) findViewById(R.id.textLapSpeedFastest);
 		textLapSpeedFastest.setText(FormatUtility.formatDurationAsMinutesAndSeconds((long) statistic.getFastestSpeed()));
 		
 		TextView textLapSpeedAverage = (TextView) findViewById(R.id.textLapSpeedAverage);
 		textLapSpeedAverage.setText(FormatUtility.formatDurationAsMinutesAndSeconds((long) statistic.getAverageSpeed()));
 		
-		TextView textLapSpeedSlowest = (TextView) findViewById(R.id.textLapSpeedSlowest);
+		textLapSpeedSlowest = (TextView) findViewById(R.id.textLapSpeedSlowest);
 		textLapSpeedSlowest.setText(FormatUtility.formatDurationAsMinutesAndSeconds((long) statistic.getSlowestSpeed()));
+		
 	}
+
+	@Override
+	public void onConfigurationChanged(Configuration configuration) {
+
+		int visibility = (configuration.orientation == Configuration.ORIENTATION_PORTRAIT ? View.GONE : View.VISIBLE);
+
+        //remove widgets to free more space in the PORTRAIT mode / restore them in LANDSCAPE mode
+		textLapTimeMinimum.setVisibility(visibility);
+    	textLapTimeMaximum.setVisibility(visibility);
+    	textLapSpeedFastest.setVisibility(visibility);
+    	textLapSpeedSlowest.setVisibility(visibility);
+    	
+    	super.onConfigurationChanged(configuration);
+	}
+	
 }
