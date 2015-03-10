@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.pvlf.android.timer"
-    android:versionCode="0023"
-    android:versionName="0.0.23">
+    android:versionCode="0025"
+    android:versionName="0.0.25">
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -43,9 +43,23 @@
             android:name="com.pvlf.android.timer.SettingsActivity"
             android:label="@string/settings" />
         
+        <!-- 
+        	HistoryActivity is configured to handle orientation, keyboard and screen size changes itself.
+        	It's implementation of onConfigurationChanged() is empty so no new instance is created and no data refresh is executed as the result.
+         -->
         <activity
             android:name="com.pvlf.android.timer.HistoryActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/history" />
+        
+        <!-- 
+        	StatisticActivity is configured to handle orientation, keyboard and screen size changes itself.
+        	It's implementation of onConfigurationChanged() handles the components removal and no new instance is created and no data refresh is executed as the result.
+         -->
+        <activity
+            android:name="com.pvlf.android.timer.StatisticActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/statistic" />
         
     </application>
 

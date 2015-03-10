@@ -1,5 +1,7 @@
 package com.pvlf.android.timer.model;
 
+import com.pvlf.android.timer.util.FormatUtility;
+
 /**
  * Run statistic.
  */
@@ -43,8 +45,20 @@ public class Statistic {
 		return getAverage() * runContext.getLapsPerUnitOfDistance();
 	}
 
+	public float getSlowestSpeed() {
+		return getMaximum() * runContext.getLapsPerUnitOfDistance();
+	}
+	
+	public float getFastestSpeed() {
+		return getMinimum() * runContext.getLapsPerUnitOfDistance();
+	}
+	
 	public float getDistance() {
 		return getLaps() / runContext.getLapsPerUnitOfDistance();
+	}
+	
+	public String getDistanceFormatted() {
+		return FormatUtility.formatDistance(getDistance());
 	}
 	
 	/**

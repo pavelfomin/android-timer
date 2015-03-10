@@ -28,7 +28,6 @@ import android.widget.Toast;
 import com.pvlf.android.timer.model.Lap;
 import com.pvlf.android.timer.model.Run;
 import com.pvlf.android.timer.model.RunContext;
-import com.pvlf.android.timer.model.Statistic;
 import com.pvlf.android.timer.model.json.RunWrapper;
 import com.pvlf.android.timer.util.AlertDialogUtility;
 import com.pvlf.android.timer.util.FormatUtility;
@@ -323,13 +322,9 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 	public void statistic(View button) {
 
 		if (run != null) {
-			Statistic statistic = run.getRunStatistic();
-			
-			if (statistic != null) {
-				String message = formatStatistic(statistic);
-				AlertDialogUtility.showAlertDialog(this, R.string.statistic, message, null); 
-				Log.d(TAG, "Run statistic: "+ message);
-			}
+			Intent intent = new Intent(this, StatisticActivity.class);
+			intent.putExtra(RUN_PARAMETER, run);
+			startActivity(intent);
 		}
 	}
 
@@ -351,30 +346,6 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 		} else {
 			Toast.makeText(this, getString(R.string.msg_runNotComplete), Toast.LENGTH_SHORT).show();
 		}
-	}
-
-	/**
-	 * Formats the statistic.
-	 * @param statistic
-	 * @return formatted statistic
-	 */
-	private String formatStatistic(Statistic statistic) {
-
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("Time per lap\n");
-		sb.append("Min: ").append(FormatUtility.formatDuration(statistic.getMinimum()));
-		sb.append(" Max: ").append(FormatUtility.formatDuration(statistic.getMaximum()));
-		sb.append(" Aver: ").append(FormatUtility.formatDuration(statistic.getAverage()));
-		
-		float lapsPerUnitOfDistance = runContext.getLapsPerUnitOfDistance();
-
-		sb.append("\nTime per mile\n");
-		sb.append("Min: ").append(FormatUtility.formatDurationAsMinutesAndSeconds((long) (statistic.getMinimum() * lapsPerUnitOfDistance)));
-		sb.append(" Max: ").append(FormatUtility.formatDurationAsMinutesAndSeconds((long) (statistic.getMaximum() * lapsPerUnitOfDistance)));
-		sb.append(" Aver: ").append(FormatUtility.formatDurationAsMinutesAndSeconds((long) (statistic.getAverage() * lapsPerUnitOfDistance)));
-		
-		return sb.toString();
 	}
 
 	/**
