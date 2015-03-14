@@ -5,95 +5,95 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-	    android:gravity="center_horizontal"
-        android:orientation="horizontal" >
-
-        <!-- duration -->
-		<LinearLayout
-		    android:layout_width="wrap_content"
+	<!-- run duration / distance -->
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+   
+		<TextView
+		    android:id="@+id/textRunDuration"
+		    style="@style/TimerTextLarge"
+			android:layout_width="0dp"
+			android:layout_weight="2.1"
 		    android:layout_height="wrap_content"
-		    android:orientation="vertical" >
-    
-			<TextView
-			    android:id="@+id/textRunDuration"
-			    style="@style/TimerTextLarge"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:singleLine="true"
-			    />
+		    android:gravity="center"
+		    android:singleLine="true"
+		    />
 
-			<TextView
-			    android:id="@+id/textLapDuration"
-			    style="@style/TimerTextLarge"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:singleLine="true"
-			    />
-		
-		</LinearLayout>
-		
-		<!-- distance -->
-		<LinearLayout
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:orientation="vertical" >
-		
-			<TextView
-	            android:id="@+id/textDistance"
-	            style="@style/TimerTextLarge"
-	            android:layout_width="wrap_content"
-	            android:layout_height="match_parent"
-	            android:singleLine="true"
-	            />
+		<TextView
+		    android:id="@+id/textDistance"
+		    style="@style/TimerTextLarge"
+		    android:layout_width="0dp"
+		    android:layout_height="match_parent"
+		    android:layout_weight="0.90"
+		    android:gravity="center"
+		    android:singleLine="true"
+		    />
 			
-			<TextView
-				android:id="@+id/textLaps"
-				style="@style/TimerTextLarge"
-				android:layout_width="wrap_content"
-				android:layout_height="match_parent"
-				android:singleLine="true"
-				/>
-		</LinearLayout>
-		
 	</LinearLayout>
+		
+	<!-- lap duration / distance -->
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
 
+	    <TextView
+		    android:id="@+id/textLapDuration"
+		    style="@style/TimerTextLarge"
+			android:layout_width="0dp"
+			android:layout_weight="2.1"
+		    android:layout_height="wrap_content"
+		    android:gravity="center"
+		    android:singleLine="true"
+		    />
+	    		
+		<TextView
+			android:id="@+id/textLaps"
+			style="@style/TimerTextLarge"
+			android:layout_width="0dp"
+			android:layout_weight="0.9"
+			android:layout_height="match_parent"
+		    android:gravity="center"
+			android:singleLine="true"
+			/>
+	</LinearLayout>
+		
     <!-- buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:orientation="horizontal" >
 
         <Button
             android:id="@+id/buttonReset"
             style="@style/TimerTextNormal"
-            android:layout_width="wrap_content"
+			android:layout_width="0dp"
+			android:layout_weight="1"
             android:layout_height="wrap_content"
             android:onClick="reset"
             android:text="@string/reset" 
-            android:drawableStart="@android:drawable/ic_menu_delete"
             />
 
         <Button
             android:id="@+id/buttonStatistic"
             style="@style/TimerTextNormal"
-            android:layout_width="wrap_content"
+			android:layout_width="0dp"
+			android:layout_weight="1.1"
             android:layout_height="wrap_content"
             android:onClick="statistic"
-            android:text="@string/statistic" 
+            android:text="@string/stats" 
             />
 
         <Button
             android:id="@+id/buttonSave"
             style="@style/TimerTextNormal"
-            android:layout_width="wrap_content"
+			android:layout_width="0dp"
+			android:layout_weight="0.9"
             android:layout_height="wrap_content"
             android:onClick="save"
             android:text="@string/save"
-            android:drawableStart="@android:drawable/ic_menu_save" 
             />
     </LinearLayout>
 

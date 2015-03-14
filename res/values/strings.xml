@@ -6,6 +6,7 @@
     <!-- buttons -->
     <string name="reset">Reset</string>
     <string name="statistic">Statistic</string>
+    <string name="stats">Stats</string>
     <string name="save">Save</string>
     <string name="removeAll">Remove all</string>
 	
