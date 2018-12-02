@@ -162,7 +162,7 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 		switch (keyCode) {
 		
 		case KeyEvent.KEYCODE_VOLUME_UP:
-			if (action == KeyEvent.ACTION_DOWN) {
+			if (action == KeyEvent.ACTION_UP) {
                 endRun(currentTimeMillis);
 			}
 			
@@ -170,7 +170,7 @@ public class TimerActivity extends ListActivity implements OnSharedPreferenceCha
 			return true;
 		
 		case KeyEvent.KEYCODE_VOLUME_DOWN:
-			if (action == KeyEvent.ACTION_DOWN) {
+			if (action == KeyEvent.ACTION_UP) {
 				startLap(currentTimeMillis);
 			}
 
