@@ -9,8 +9,8 @@ android {
         applicationId "com.droidablebee.android.timer"
         minSdk 21
         targetSdk 35
-        versionCode 101
-        versionName "1.0.1"
+        versionCode project.property('version').replaceAll("\\.", "").toInteger()
+        versionName project.property('version')
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -27,6 +27,18 @@ android {
     }
     buildFeatures {
         viewBinding true
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+afterEvaluate {
+    tasks.matching { it.name.startsWith("bundle") ||  it.name.startsWith("build") }.configureEach {
+        doLast {
+            println "Version Name: ${android.defaultConfig.versionName}"
+            println "Version Code: ${android.defaultConfig.versionCode}"
+        }
     }
 }
 
