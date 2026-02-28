@@ -1,6 +1,6 @@
-package com.pvlf.android.timer.model;
+package com.droidablebee.android.timer.model;
 
-import com.pvlf.android.timer.util.FormatUtility;
+import com.droidablebee.android.timer.util.FormatUtility;
 
 /**
  * Run statistic.

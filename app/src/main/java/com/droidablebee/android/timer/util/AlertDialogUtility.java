@@ -1,6 +1,6 @@
-package com.pvlf.android.timer.util;
+package com.droidablebee.android.timer.util;
 
-import com.pvlf.android.timer.R;
+import com.droidablebee.android.timer.R;
 
 import android.app.AlertDialog;
 import android.content.Context;

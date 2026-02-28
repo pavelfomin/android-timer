@@ -1,4 +1,4 @@
-package com.pvlf.android.timer.model.json;
+package com.droidablebee.android.timer.model.json;
 
 import java.io.Serializable;
 
@@ -6,9 +6,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.pvlf.android.timer.model.Lap;
-import com.pvlf.android.timer.model.Run;
-import com.pvlf.android.timer.model.RunContext;
+import com.droidablebee.android.timer.model.Lap;
+import com.droidablebee.android.timer.model.Run;
+import com.droidablebee.android.timer.model.RunContext;
 
 /**
  * Run JSON wrapper. 

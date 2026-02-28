@@ -1,4 +1,4 @@
-package com.pvlf.android.timer.model.json;
+package com.droidablebee.android.timer.model.json;
 
 import java.io.Serializable;
 

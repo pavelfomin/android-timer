@@ -1,11 +1,11 @@
-package com.pvlf.android.timer.model;
+package com.droidablebee.android.timer.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.pvlf.android.timer.util.FormatUtility;
+import com.droidablebee.android.timer.util.FormatUtility;
 
 /**
  * Holds the data for a run.

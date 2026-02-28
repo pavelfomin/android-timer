@@ -1,4 +1,4 @@
-package com.pvlf.android.timer;
+package com.droidablebee.android.timer;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;

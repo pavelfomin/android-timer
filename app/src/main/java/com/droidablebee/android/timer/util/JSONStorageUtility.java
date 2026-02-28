@@ -1,4 +1,4 @@
-package com.pvlf.android.timer.util;
+package com.droidablebee.android.timer.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,7 +12,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.util.Log;
 
-import com.pvlf.android.timer.model.json.JSONSerializable;
+import com.droidablebee.android.timer.model.json.JSONSerializable;
 
 /**
  * JSON storage history utility that encapsulates entities read/write functionality.

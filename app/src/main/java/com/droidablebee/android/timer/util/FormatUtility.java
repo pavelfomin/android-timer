@@ -1,4 +1,4 @@
-package com.pvlf.android.timer.util;
+package com.droidablebee.android.timer.util;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;

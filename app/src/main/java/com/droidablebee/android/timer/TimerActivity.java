@@ -1,4 +1,4 @@
-package com.pvlf.android.timer;
+package com.droidablebee.android.timer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +25,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pvlf.android.timer.model.Lap;
-import com.pvlf.android.timer.model.Run;
-import com.pvlf.android.timer.model.RunContext;
-import com.pvlf.android.timer.model.json.RunWrapper;
-import com.pvlf.android.timer.util.AlertDialogUtility;
-import com.pvlf.android.timer.util.FormatUtility;
-import com.pvlf.android.timer.util.JSONStorageUtility;
+import com.droidablebee.android.timer.model.Lap;
+import com.droidablebee.android.timer.model.Run;
+import com.droidablebee.android.timer.model.RunContext;
+import com.droidablebee.android.timer.model.json.RunWrapper;
+import com.droidablebee.android.timer.util.AlertDialogUtility;
+import com.droidablebee.android.timer.util.FormatUtility;
+import com.droidablebee.android.timer.util.JSONStorageUtility;
 
 /**
  * Main timer activity.

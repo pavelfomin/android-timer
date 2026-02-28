@@ -1,4 +1,4 @@
-package com.pvlf.android.timer;
+package com.droidablebee.android.timer;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,9 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.pvlf.android.timer.model.Run;
-import com.pvlf.android.timer.model.Statistic;
-import com.pvlf.android.timer.util.FormatUtility;
+import com.droidablebee.android.timer.model.Run;
+import com.droidablebee.android.timer.model.Statistic;
+import com.droidablebee.android.timer.util.FormatUtility;
 
 /**
  * Activity that shows runs statistic.
