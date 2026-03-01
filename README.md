@@ -13,7 +13,11 @@
 ![Screenshot](https://github.com/pavelfomin/android-timer/blob/master/docs/screenshot.png)
 
 ## Screenshots
+
 ### Run / laps
+Main screen showing total run and current lap duration, total distance covered 
+(based on the configuration), run controls and laps completed.
+
 ![Run](https://github.com/pavelfomin/android-timer/blob/master/docs/run.png)
 
 ### Statistic
