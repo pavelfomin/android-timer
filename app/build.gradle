@@ -15,10 +15,27 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            storeFile file(project.property("keystore"))
+            storePassword project.property("keystorePassword")
+            keyAlias project.property("keyAlias")
+            keyPassword project.property("keyPassword")
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // Only apply signing if the task name starts with 'bundle'
+            if (gradle.startParameter.taskNames.any { it.contains("bundle") }) {
+                signingConfig signingConfigs.release
+                minifyEnabled true
+                shrinkResources true
+            } else {
+                signingConfig null // APKs will be unsigned
+            }
         }
     }
     compileOptions {
