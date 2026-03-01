@@ -12,10 +12,15 @@
 
 ![Screenshot](https://github.com/pavelfomin/android-timer/blob/master/docs/screenshot.png)
 
+## Screenshots
+### Run / laps
 ![Run](https://github.com/pavelfomin/android-timer/blob/master/docs/run.png)
 
+### Statistic
 ![Statistic](https://github.com/pavelfomin/android-timer/blob/master/docs/statistic.png)
 
+### Settings
 ![Settings](https://github.com/pavelfomin/android-timer/blob/master/docs/settings.png)
 
+### History
 ![History](https://github.com/pavelfomin/android-timer/blob/master/docs/history.png)
