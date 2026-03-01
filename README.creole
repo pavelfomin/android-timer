@@ -9,7 +9,11 @@
 * Shows the statistic for a current run in progress or a saved run.
 
 {{https://github.com/pavelfomin/android-timer/blob/master/docs/screenshot.png}}
+
 {{https://github.com/pavelfomin/android-timer/blob/master/docs/run.png}}
+
 {{https://github.com/pavelfomin/android-timer/blob/master/docs/statistic.png}}
+
 {{https://github.com/pavelfomin/android-timer/blob/master/docs/settings.png}}
+
 {{https://github.com/pavelfomin/android-timer/blob/master/docs/history.png}}
