@@ -12,21 +12,31 @@
 
 ![Main screenshot](docs/screenshot.png)
 
-## Screenshots
-
-### Run / laps
+## Run / laps
 Main screen showing total run and current lap duration, total distance covered 
 (based on the configuration), run controls and laps completed.
 
 <a href="docs/run.png">
-  <img src="docs/run.png" width="40%" alt="Run">
+  <img alt="Run" src="docs/run.png" width="40%"/>
 </a>
 
-### Statistic
-![Statistic](docs/statistic.png)
+## Statistic
+Statistic screen showing current run statistic.
 
-### Settings
-![Settings](docs/settings.png)
+<a href="docs/statistic.png">
+    <img alt="Statistic" src="docs/statistic.png" width="40%"/>
+</a>
 
-### History
-![History](docs/history.png)
+## Settings
+Settings screen allows to configure laps per unit of distance and refresh rate.
+
+<a href="docs/settings.png">
+    <img alt="Settings" src="docs/settings.png" width="40%"/>
+</a>
+
+## History
+History screen shows saved runs.
+
+<a href="docs/history.png">
+    <img alt="History" src="docs/history.png" width="40%"/>
+</a>
