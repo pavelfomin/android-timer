@@ -1,8 +1,6 @@
 # Android Timer
 
-**Android Timer** is a run timer application for *Android* with the following features:
-
-**Android Timer** is a lap‑based running timer for Android designed to make tracking your runs simple. 
+**Android Timer** is a lap‑based running timer for **Android** designed to make tracking your runs simple. 
 Features include:
 
 * **Physical button controls** using the device’s volume keys: press _Volume Down_ to start a lap or resume a run, and _Volume Up_ to stop or pause.
