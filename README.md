@@ -10,7 +10,7 @@
 * Allows to configure a number of laps per unit of distance e.g. mile, kilometer, etc.
 * Shows the statistic for a current run in progress or a saved run.
 
-![Screenshot](https://github.com/pavelfomin/android-timer/blob/master/docs/screenshot.png)
+![Main screenshot](docs/screenshot.png)
 
 ## Screenshots
 
@@ -18,13 +18,13 @@
 Main screen showing total run and current lap duration, total distance covered 
 (based on the configuration), run controls and laps completed.
 
-![Run](https://github.com/pavelfomin/android-timer/blob/master/docs/run.png)
+![Run](docs/run.png)
 
 ### Statistic
-![Statistic](https://github.com/pavelfomin/android-timer/blob/master/docs/statistic.png)
+![Statistic](docs/statistic.png)
 
 ### Settings
-![Settings](https://github.com/pavelfomin/android-timer/blob/master/docs/settings.png)
+![Settings](docs/settings.png)
 
 ### History
-![History](https://github.com/pavelfomin/android-timer/blob/master/docs/history.png)
+![History](docs/history.png)
