@@ -18,7 +18,9 @@
 Main screen showing total run and current lap duration, total distance covered 
 (based on the configuration), run controls and laps completed.
 
-![Run](docs/run.png)
+<a href="docs/run.png">
+  <img src="docs/run.png" width="40%" alt="Run">
+</a>
 
 ### Statistic
 ![Statistic](docs/statistic.png)
